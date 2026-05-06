@@ -1,0 +1,94 @@
+.vapi-controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.vapi-control-btn {
+  border: none;
+  outline: none;
+  min-height: 48px;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 950;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    background 0.24s ease,
+    border-color 0.24s ease,
+    opacity 0.24s ease;
+  white-space: nowrap;
+}
+
+.vapi-start-btn {
+  flex: 1 1 220px;
+  color: white;
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  box-shadow: 0 16px 42px rgba(124, 58, 237, 0.36);
+}
+
+.vapi-start-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 56px rgba(124, 58, 237, 0.48);
+}
+
+.vapi-start-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.vapi-end-btn {
+  flex: 1 1 220px;
+  color: white;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 16px 42px rgba(239, 68, 68, 0.28);
+}
+
+.vapi-end-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 52px rgba(239, 68, 68, 0.42);
+}
+
+.vapi-new-btn {
+  flex: 0 0 auto;
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.vapi-new-btn:hover {
+  transform: translateY(-2px);
+  color: #ffffff;
+  border-color: rgba(124, 58, 237, 0.45);
+  background: rgba(124, 58, 237, 0.13);
+}
+
+.vapi-spin {
+  animation: vapiSpin 1s linear infinite;
+}
+
+@keyframes vapiSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .vapi-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vapi-control-btn {
+    width: 100%;
+    flex: none;
+  }
+}

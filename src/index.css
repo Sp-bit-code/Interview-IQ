@@ -1,0 +1,49 @@
+.router-loading-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #070b14;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.router-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.router-loading-box span {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+  animation: routerPulse 1.4s ease-in-out infinite;
+}
+
+.router-spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid #7c3aed;
+  border-top-color: transparent;
+  border-radius: 999px;
+  animation: routerSpin 0.9s linear infinite;
+}
+
+@keyframes routerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes routerPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
