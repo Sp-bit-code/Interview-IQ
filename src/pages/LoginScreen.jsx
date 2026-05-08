@@ -1,8 +1,10 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { supabase } from "../lib/supabase";
 import { useAuthStore } from "../store/useAuthStore.js";
 import { Mic, Mail, Lock, ArrowRight } from "lucide-react";
+import LightPillar from "../components/LightPillar";
 
 import "./LoginScreen.css";
 
@@ -90,125 +92,144 @@ export default function LoginScreen() {
 
   return (
     <div className="login-page">
+      <div className="login-light-pillar-bg">
+        <LightPillar
+          topColor="#5227FF"
+          bottomColor="#FF9FFC"
+          intensity={1}
+          rotationSpeed={0.3}
+          glowAmount={0.002}
+          pillarWidth={3}
+          pillarHeight={0.4}
+          noiseIntensity={0.5}
+          pillarRotation={25}
+          interactive={false}
+          mixBlendMode="screen"
+          quality="high"
+        />
+      </div>
+
       <div className="login-bg-glow login-bg-glow-one"></div>
       <div className="login-bg-glow login-bg-glow-two"></div>
       <div className="login-bg-grid"></div>
 
-      <Link to="/" className="login-brand">
-        <div className="login-brand-icon">
-          <Mic size={21} />
-        </div>
-        <span>InterviewIQ</span>
-      </Link>
-
-      <div className="login-card">
-        <div className="login-card-header">
-          <h1>{isSignUp ? "Create an Account" : "Welcome Back"}</h1>
-
-          <p>
-            {isSignUp
-              ? "Sign up to save your interview history and track progress."
-              : "Log in to access your dashboard and history."}
-          </p>
-        </div>
-
-        {error && (
-          <div
-            className={`login-message ${
-              String(error).includes("Success")
-                ? "login-message-success"
-                : "login-message-error"
-            }`}
-          >
-            {error}
+      <div className="login-content-layer">
+        <Link to="/" className="login-brand">
+          <div className="login-brand-icon">
+            <Mic size={21} />
           </div>
-        )}
+          <span>InterviewIQ</span>
+        </Link>
 
-        <form onSubmit={handleEmailAuth} className="login-form">
-          <div className="login-field-group">
-            <label>Email Address</label>
+        <div className="login-card">
+          <div className="login-card-header">
+            <h1>{isSignUp ? "Create an Account" : "Welcome Back"}</h1>
 
-            <div className="login-input-wrapper">
-              <Mail size={20} className="login-input-icon" />
+            <p>
+              {isSignUp
+                ? "Sign up to save your interview history and track progress."
+                : "Log in to access your dashboard and history."}
+            </p>
+          </div>
 
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@domain.com"
-                autoComplete="email"
-              />
+          {error && (
+            <div
+              className={`login-message ${
+                String(error).includes("Success")
+                  ? "login-message-success"
+                  : "login-message-error"
+              }`}
+            >
+              {error}
             </div>
-          </div>
+          )}
 
-          <div className="login-field-group">
-            <label>Password</label>
+          <form onSubmit={handleEmailAuth} className="login-form">
+            <div className="login-field-group">
+              <label>Email Address</label>
 
-            <div className="login-input-wrapper">
-              <Lock size={20} className="login-input-icon" />
+              <div className="login-input-wrapper">
+                <Mail size={20} className="login-input-icon" />
 
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="••••••••"
-                autoComplete={isSignUp ? "new-password" : "current-password"}
-              />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@domain.com"
+                  autoComplete="email"
+                />
+              </div>
             </div>
+
+            <div className="login-field-group">
+              <label>Password</label>
+
+              <div className="login-input-wrapper">
+                <Lock size={20} className="login-input-icon" />
+
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="••••••••"
+                  autoComplete={isSignUp ? "new-password" : "current-password"}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading || googleLoading}
+              className="login-submit-btn"
+            >
+              <span>
+                {loading
+                  ? "Processing..."
+                  : isSignUp
+                  ? "Create Account"
+                  : "Sign In"}
+              </span>
+
+              {!loading && <ArrowRight size={17} />}
+            </button>
+          </form>
+
+          <div className="login-divider">
+            <span>OR CONTINUE WITH</span>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading || googleLoading}
-            className="login-submit-btn"
-          >
-            <span>
-              {loading
-                ? "Processing..."
-                : isSignUp
-                ? "Create Account"
-                : "Sign In"}
-            </span>
-
-            {!loading && <ArrowRight size={17} />}
-          </button>
-        </form>
-
-        <div className="login-divider">
-          <span>OR CONTINUE WITH</span>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleGoogleAuth}
-          disabled={googleLoading || loading}
-          className="login-google-btn"
-        >
-          <GoogleIcon />
-          <span>{googleLoading ? "Redirecting..." : "Google Account"}</span>
-        </button>
-
-        <p className="login-switch-text">
-          {isSignUp ? "Already have an account?" : "Don't have an account?"}
 
           <button
             type="button"
-            onClick={() => {
-              setIsSignUp(!isSignUp);
-              setError(null);
-            }}
+            onClick={handleGoogleAuth}
+            disabled={googleLoading || loading}
+            className="login-google-btn"
           >
-            {isSignUp ? "Log In" : "Sign Up"}
+            <GoogleIcon />
+            <span>{googleLoading ? "Redirecting..." : "Google Account"}</span>
           </button>
-        </p>
 
-        <div className="login-guest-box">
-          <button type="button" onClick={handleGuestPractice}>
-            Skip login → Practice as guest
-          </button>
+          <p className="login-switch-text">
+            {isSignUp ? "Already have an account?" : "Don't have an account?"}
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError(null);
+              }}
+            >
+              {isSignUp ? "Log In" : "Sign Up"}
+            </button>
+          </p>
+
+          <div className="login-guest-box">
+            <button type="button" onClick={handleGuestPractice}>
+              Skip login → Practice as guest
+            </button>
+          </div>
         </div>
       </div>
     </div>
