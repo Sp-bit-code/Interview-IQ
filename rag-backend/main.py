@@ -792,7 +792,6 @@
 # if __name__ == "__main__":
 #     main()
 
-
 import os
 
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
@@ -889,14 +888,18 @@ app = FastAPI(
 # CORS
 # ---------------------------------------------------------
 
-allowed_origins = list(set([
-    FRONTEND_URL,
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    *CORS_ALLOWED_ORIGINS,
-]))
+allowed_origins = list(
+    set(
+        [
+            FRONTEND_URL,
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            *CORS_ALLOWED_ORIGINS,
+        ]
+    )
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -1081,15 +1084,16 @@ def root():
         "message": "InterviewIQ RAG Backend is running",
         "docs": "/docs",
         "health": "/health",
+        "version": APP_VERSION,
     }
 
 
 @app.get("/health")
 def health_check():
     return {
-        "success": True,
         "status": "ok",
         "service": "InterviewIQ RAG Backend",
+        "message": "Backend is running",
         "version": APP_VERSION,
     }
 
