@@ -1097,6 +1097,44 @@ def health_check():
         "version": APP_VERSION,
     }
 
+@app.get("/status")
+def backend_status():
+    return {
+        "success": True,
+        "service": "InterviewIQ RAG Backend",
+        "status": "running",
+        "version": APP_VERSION,
+        "docs": "/docs",
+        "health": "/health",
+        "features": {
+            "notes_upload": True,
+            "notes_processing": True,
+            "notes_rag_chat": True,
+            "notes_summarization": True,
+            "question_generation": True,
+            "flashcard_generation": True,
+            "resume_gap_analysis": True,
+            "session_management": True,
+            "debug_config": True,
+            "debug_vector_search": True,
+        },
+        "available_endpoints": {
+            "root": "/",
+            "health": "/health",
+            "docs": "/docs",
+            "upload_notes": "/api/notes/upload",
+            "process_notes": "/api/notes/process",
+            "ask_notes": "/api/notes/ask",
+            "summarize_notes": "/api/notes/summarize",
+            "generate_questions": "/api/notes/questions",
+            "generate_flashcards": "/api/flashcards/generate",
+            "resume_gap_analysis": "/api/resume/gap-analysis",
+            "debug_config": "/api/debug/config",
+            "debug_search": "/api/debug/search",
+        },
+        "allowed_origins_count": len(allowed_origins),
+    }
+
 
 # ---------------------------------------------------------
 # Notes upload + process
