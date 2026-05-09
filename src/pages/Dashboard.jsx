@@ -830,6 +830,74 @@ const RAG_FEATURES = [
   },
 ];
 
+function getNumberOrNull(value) {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return null;
+  }
+
+  return number;
+}
+
+function formatScore(value) {
+  const number = getNumberOrNull(value);
+
+  if (number === null) {
+    return "Not measured";
+  }
+
+  return number.toFixed(1);
+}
+
+function getScoreClass(value) {
+  const number = getNumberOrNull(value);
+
+  if (number === null) {
+    return "dashboard-score-neutral";
+  }
+
+  if (number >= 8) {
+    return "dashboard-score-good";
+  }
+
+  if (number >= 6) {
+    return "dashboard-score-mid";
+  }
+
+  return "dashboard-score-low";
+}
+
+function getAverageScoreFromSessions(sessions) {
+  const validScores = sessions
+    .map((session) => getNumberOrNull(session.score_overall))
+    .filter((score) => score !== null);
+
+  if (validScores.length === 0) {
+    return "0.0";
+  }
+
+  const total = validScores.reduce((acc, score) => acc + score, 0);
+
+  return (total / validScores.length).toFixed(1);
+}
+
+function getBestScoreFromSessions(sessions) {
+  const validScores = sessions
+    .map((session) => getNumberOrNull(session.score_overall))
+    .filter((score) => score !== null);
+
+  if (validScores.length === 0) {
+    return "0.0";
+  }
+
+  return Math.max(...validScores).toFixed(1);
+}
+
 export default function Dashboard() {
   const { user, signOut } = useAuthStore();
   const navigate = useNavigate();
@@ -886,26 +954,12 @@ export default function Dashboard() {
   const totalSessions = sessions.length;
 
   const averageScore = useMemo(() => {
-    if (totalSessions === 0) {
-      return "0.0";
-    }
-
-    const total = sessions.reduce((acc, session) => {
-      return acc + Number(session.score_overall || 0);
-    }, 0);
-
-    return (total / totalSessions).toFixed(1);
-  }, [sessions, totalSessions]);
+    return getAverageScoreFromSessions(sessions);
+  }, [sessions]);
 
   const bestScore = useMemo(() => {
-    if (totalSessions === 0) {
-      return "0.0";
-    }
-
-    return Math.max(
-      ...sessions.map((session) => Number(session.score_overall || 0))
-    ).toFixed(1);
-  }, [sessions, totalSessions]);
+    return getBestScoreFromSessions(sessions);
+  }, [sessions]);
 
   const chartData = useMemo(() => {
     return sessions.map((session, index) => {
@@ -913,12 +967,14 @@ export default function Dashboard() {
         ? new Date(session.created_at)
         : new Date();
 
+      const score = getNumberOrNull(session.score_overall);
+
       return {
         date: createdDate.toLocaleDateString(undefined, {
           month: "short",
           day: "numeric",
         }),
-        score: Number(session.score_overall || 0),
+        score: score === null ? 0 : score,
         track: session.track || "General",
         difficulty: session.difficulty || "Fresher",
         sessionNo: index + 1,
@@ -927,14 +983,18 @@ export default function Dashboard() {
   }, [sessions]);
 
   const hasEyeContactPro = sessions.some((session) => {
-    const eyeContact = Number(session.score_eye_contact || 0);
-    const bodyLanguage = Number(session.score_body_language || 0);
+    const eyeContact = getNumberOrNull(session.score_eye_contact);
+    const bodyLanguage = getNumberOrNull(session.score_body_language);
 
-    return eyeContact >= 9 || bodyLanguage >= 9;
+    return (
+      (eyeContact !== null && eyeContact >= 9) ||
+      (bodyLanguage !== null && bodyLanguage >= 9)
+    );
   });
 
   const has90Club = sessions.some((session) => {
-    return Number(session.score_overall || 0) >= 9;
+    const overall = getNumberOrNull(session.score_overall);
+    return overall !== null && overall >= 9;
   });
 
   const has5Streak = totalSessions >= 5;
@@ -1039,7 +1099,7 @@ export default function Dashboard() {
             <div>
               <h1>
                 {activeTab === "dashboard"
-                  ? "Welcome Back! 👋"
+                  ? "Welcome Back"
                   : "Past Sessions"}
               </h1>
 
@@ -1313,7 +1373,7 @@ export default function Dashboard() {
                       .reverse()
                       .slice(0, activeTab === "sessions" ? undefined : 5)
                       .map((session) => {
-                        const score = Number(session.score_overall || 0);
+                        const score = getNumberOrNull(session.score_overall);
 
                         return (
                           <tr key={session.id}>
@@ -1340,15 +1400,11 @@ export default function Dashboard() {
 
                             <td className="dashboard-text-right">
                               <span
-                                className={`dashboard-score ${
-                                  score >= 8
-                                    ? "dashboard-score-good"
-                                    : score >= 6
-                                    ? "dashboard-score-mid"
-                                    : "dashboard-score-low"
-                                }`}
+                                className={`dashboard-score ${getScoreClass(
+                                  score
+                                )}`}
                               >
-                                {score.toFixed(1)}
+                                {formatScore(score)}
                               </span>
                             </td>
 
@@ -1388,12 +1444,12 @@ function ReportModal({ report, onClose }) {
   const setup = data.setup || {};
   const transcript = Array.isArray(data.transcript) ? data.transcript : [];
 
-  const overallScore = Number(report.score_overall || 0);
-  const communicationScore = Number(report.score_communication || 0);
-  const confidenceScore = Number(report.score_confidence || 0);
-  const bodyLanguageScore = Number(report.score_body_language || 0);
-  const eyeContactScore = Number(report.score_eye_contact || 0);
-  const speakingPaceScore = Number(report.score_speaking_pace || 0);
+  const overallScore = getNumberOrNull(report.score_overall);
+  const communicationScore = getNumberOrNull(report.score_communication);
+  const confidenceScore = getNumberOrNull(report.score_confidence);
+  const bodyLanguageScore = getNumberOrNull(report.score_body_language);
+  const eyeContactScore = getNumberOrNull(report.score_eye_contact);
+  const speakingPaceScore = getNumberOrNull(report.score_speaking_pace);
 
   const durationSeconds = Number(
     report.duration_seconds || data.durationSeconds || 0
@@ -1407,7 +1463,18 @@ function ReportModal({ report, onClose }) {
   const summary =
     typeof data.overallSummary === "string"
       ? data.overallSummary
-      : "Vapi voice interview completed. Transcript and basic score are saved.";
+      : "Vapi voice interview completed. Transcript and score are saved.";
+
+  const scoreReason =
+    typeof data.scoreReason === "string"
+      ? data.scoreReason
+      : data.groqScoring?.scoreReason || "";
+
+  const cameraMetrics =
+    data.cameraMetrics ||
+    data.groqScoring?.cameraMetrics ||
+    data.groqScoring?.camera_metrics ||
+    {};
 
   return (
     <div className="dashboard-modal-overlay" onClick={onClose}>
@@ -1445,7 +1512,7 @@ function ReportModal({ report, onClose }) {
 
         <div className="dashboard-overall-score-box">
           <p>Overall Score</p>
-          <h3>{overallScore.toFixed(1)}</h3>
+          <h3>{formatScore(overallScore)}</h3>
           <span>out of 10</span>
         </div>
 
@@ -1462,6 +1529,13 @@ function ReportModal({ report, onClose }) {
           <h3>Summary</h3>
           <p>{summary}</p>
         </div>
+
+        {scoreReason && (
+          <div className="dashboard-report-section">
+            <h3>Score Reason</h3>
+            <p>{scoreReason}</p>
+          </div>
+        )}
 
         <div className="dashboard-report-section">
           <h3>Interview Setup</h3>
@@ -1505,6 +1579,62 @@ function ReportModal({ report, onClose }) {
           </div>
         </div>
 
+        {cameraMetrics && Object.keys(cameraMetrics).length > 0 && (
+          <div className="dashboard-report-section">
+            <h3>Camera / Speaking Metrics</h3>
+
+            <div className="dashboard-report-meta-grid">
+              <ReportMetaItem
+                icon={<Eye size={16} />}
+                label="Eye Contact"
+                value={
+                  cameraMetrics.eye_contact_percent !== undefined
+                    ? `${cameraMetrics.eye_contact_percent}%`
+                    : cameraMetrics.eyeContactPercent !== undefined
+                    ? `${cameraMetrics.eyeContactPercent}%`
+                    : "Tracked"
+                }
+              />
+
+              <ReportMetaItem
+                icon={<User size={16} />}
+                label="Face Visible"
+                value={
+                  cameraMetrics.face_visible_percent !== undefined
+                    ? `${cameraMetrics.face_visible_percent}%`
+                    : cameraMetrics.faceVisiblePercent !== undefined
+                    ? `${cameraMetrics.faceVisiblePercent}%`
+                    : "Tracked"
+                }
+              />
+
+              <ReportMetaItem
+                icon={<Target size={16} />}
+                label="Centered Face"
+                value={
+                  cameraMetrics.centered_face_percent !== undefined
+                    ? `${cameraMetrics.centered_face_percent}%`
+                    : cameraMetrics.centeredFacePercent !== undefined
+                    ? `${cameraMetrics.centeredFacePercent}%`
+                    : "Tracked"
+                }
+              />
+
+              <ReportMetaItem
+                icon={<Mic size={16} />}
+                label="Words / Min"
+                value={
+                  cameraMetrics.words_per_minute !== undefined
+                    ? String(cameraMetrics.words_per_minute)
+                    : cameraMetrics.wordsPerMinute !== undefined
+                    ? String(cameraMetrics.wordsPerMinute)
+                    : "Tracked"
+                }
+              />
+            </div>
+          </div>
+        )}
+
         {Array.isArray(data.improvementTips) &&
           data.improvementTips.length > 0 && (
             <div className="dashboard-report-section">
@@ -1520,6 +1650,36 @@ function ReportModal({ report, onClose }) {
               </div>
             </div>
           )}
+
+        {Array.isArray(data.strengths) && data.strengths.length > 0 && (
+          <div className="dashboard-report-section">
+            <h3>Strengths</h3>
+
+            <div className="dashboard-tips-list">
+              {data.strengths.map((item, index) => (
+                <div key={index} className="dashboard-tip-item">
+                  <span>{index + 1}</span>
+                  <p>{String(item)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {Array.isArray(data.weaknesses) && data.weaknesses.length > 0 && (
+          <div className="dashboard-report-section">
+            <h3>Weak Areas</h3>
+
+            <div className="dashboard-tips-list">
+              {data.weaknesses.map((item, index) => (
+                <div key={index} className="dashboard-tip-item">
+                  <span>{index + 1}</span>
+                  <p>{String(item)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="dashboard-report-section">
           <h3>Transcript</h3>
@@ -1577,20 +1737,10 @@ function ScoreItem({ label, value, isText = false }) {
     );
   }
 
-  const finalValue = Number(value || 0);
-
-  let scoreClass = "dashboard-score-low";
-
-  if (finalValue >= 8) {
-    scoreClass = "dashboard-score-good";
-  } else if (finalValue >= 6) {
-    scoreClass = "dashboard-score-mid";
-  }
-
   return (
     <div className="dashboard-score-item">
       <span>{label}</span>
-      <strong className={scoreClass}>{finalValue.toFixed(1)}</strong>
+      <strong className={getScoreClass(value)}>{formatScore(value)}</strong>
     </div>
   );
 }

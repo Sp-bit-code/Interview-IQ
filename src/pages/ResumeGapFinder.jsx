@@ -909,8 +909,8 @@ export default function ResumeGapFinder() {
           <p>Compare your resume with a job description using RAG + Groq AI.</p>
         </div>
 
-        <Link to="/study-notes" className="resume-gap-header-link">
-          Study from Notes
+        <Link to="/LandingPage" className="resume-gap-header-link">
+          Home
           <ExternalLink size={16} />
         </Link>
       </header>

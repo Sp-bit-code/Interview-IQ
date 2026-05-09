@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import {
   ArrowLeft,
   Brain,
-  BookOpen,
   Loader2,
   AlertCircle,
   CheckCircle2,
@@ -18,6 +17,7 @@ import {
 
 import {
   checkRagBackendHealth,
+  uploadNotes,
   generateFlashcards,
   getSessionSummary,
 } from "../lib/ragApi";
@@ -28,15 +28,11 @@ import "./Flashcards.css";
 
 export default function Flashcards() {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const {
     backendStatus,
     backendError,
-
-    sessionId,
-    ragReady,
-    sessionSummary,
-    vectorStatus,
 
     generatingFlashcards,
 
@@ -51,8 +47,6 @@ export default function Flashcards() {
 
     setBackendStatus,
     setBackendError,
-
-    setSessionData,
 
     setGeneratingFlashcards,
     setFlashcards,
@@ -71,9 +65,18 @@ export default function Flashcards() {
     clearAlerts,
   } = useRagStore();
 
-  const totalPdfs = sessionSummary?.total_pdfs || 0;
-  const totalChunks = sessionSummary?.total_chunks || 0;
-  const totalVectors = vectorStatus?.total_vectors || 0;
+  const [flashcardFiles, setFlashcardFiles] = useState([]);
+  const [flashcardSessionId, setFlashcardSessionId] = useState("");
+  const [flashcardRagReady, setFlashcardRagReady] = useState(false);
+  const [flashcardSessionSummary, setFlashcardSessionSummary] = useState(null);
+  const [flashcardVectorStatus, setFlashcardVectorStatus] = useState(null);
+  const [uploadingFlashcardDocs, setUploadingFlashcardDocs] = useState(false);
+  const [flashcardCount, setFlashcardCount] = useState(10);
+
+  const totalPdfs = flashcardSessionSummary?.total_pdfs || 0;
+  const totalChunks = flashcardSessionSummary?.total_chunks || 0;
+  const totalVectors = flashcardVectorStatus?.total_vectors || 0;
+  const selectedFilesCount = flashcardFiles?.length || 0;
 
   const currentFlashcard = useMemo(() => {
     if (!Array.isArray(flashcards) || flashcards.length === 0) {
@@ -123,49 +126,149 @@ export default function Flashcards() {
   }, [setBackendStatus, setBackendError]);
 
   useEffect(() => {
-    const loadExistingSession = async () => {
-      if (!sessionId) {
+    const loadExistingFlashcardSession = async () => {
+      if (!flashcardSessionId) {
         return;
       }
 
       try {
-        const result = await getSessionSummary(sessionId);
+        const result = await getSessionSummary(flashcardSessionId);
 
-        setSessionData({
-          sessionId,
-          sessionSummary: result?.session_summary,
-          pdfSummary: result?.pdf_summary,
-          vectorStatus: result?.vector_status,
-          ragReady: result?.rag_ready,
-        });
+        setFlashcardSessionSummary(result?.session_summary || null);
+        setFlashcardVectorStatus(result?.vector_status || null);
+        setFlashcardRagReady(Boolean(result?.rag_ready));
       } catch (err) {
-        console.warn("Could not load previous RAG session:", err);
+        console.warn("Could not load flashcard RAG session:", err);
       }
     };
 
-    loadExistingSession();
-  }, [sessionId, setSessionData]);
+    loadExistingFlashcardSession();
+  }, [flashcardSessionId]);
 
-  const handleGenerateFlashcards = async () => {
-    if (!sessionId || !ragReady) {
-      setError("Please upload and process notes first in Study from Notes.");
+  const handleFlashcardFileChange = (event) => {
+    const files = Array.from(event.target.files || []);
+
+    if (!files.length) {
+      return;
+    }
+
+    const invalidFiles = files.filter((file) => {
+      return file.type !== "application/pdf" && !file.name.endsWith(".pdf");
+    });
+
+    if (invalidFiles.length > 0) {
+      setError("Please upload only PDF files for flashcards.");
+      return;
+    }
+
+    setFlashcardFiles(files);
+    clearError();
+    clearSuccessMessage();
+  };
+
+  const handleUploadFlashcardDocs = async () => {
+    if (!flashcardFiles || flashcardFiles.length === 0) {
+      setError("Please select at least one PDF file for flashcards.");
       return;
     }
 
     try {
       clearAlerts();
+      clearFlashcards();
+      setUploadingFlashcardDocs(true);
+
+      const result = await uploadNotes({
+        files: flashcardFiles,
+        sessionId: flashcardSessionId || undefined,
+      });
+
+      if (!result?.success) {
+        throw new Error(result?.message || "Flashcard PDF upload failed.");
+      }
+
+      const newSessionId = result.session_id || flashcardSessionId;
+
+      setFlashcardSessionId(newSessionId);
+      setFlashcardSessionSummary(result.session_summary || null);
+      setFlashcardVectorStatus(result.vector_status || null);
+      setFlashcardRagReady(Boolean(result?.vector_status?.ready));
+
+      setSuccessMessage(
+        result?.message ||
+          "Flashcard PDFs uploaded, processed, and indexed successfully."
+      );
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (err) {
+      console.error("Flashcard PDF upload/process error:", err);
+
+      setError(
+        err?.message ||
+          "Failed to upload/process flashcard PDFs. Check backend and try again."
+      );
+    } finally {
+      setUploadingFlashcardDocs(false);
+    }
+  };
+
+  const handleGenerateFlashcards = async () => {
+    if (!flashcardSessionId || !flashcardRagReady) {
+      setError("Please upload and process PDF docs for flashcards first.");
+      return;
+    }
+
+    try {
+      clearAlerts();
+      clearFlashcards();
       setGeneratingFlashcards(true);
 
-      const result = await generateFlashcards(sessionId);
+      const targetCount = Number(flashcardCount) || 10;
+      const collectedFlashcards = [];
+      const rawOutputs = [];
 
-      setFlashcards(result?.flashcards || [], result?.raw || "");
+      let attempts = 0;
+      const maxAttempts = Math.max(2, Math.ceil(targetCount / 5) + 2);
 
-      if (!result?.flashcards || result.flashcards.length === 0) {
+      while (collectedFlashcards.length < targetCount && attempts < maxAttempts) {
+        attempts += 1;
+
+        const remainingCount = targetCount - collectedFlashcards.length;
+
+        const result = await generateFlashcards(flashcardSessionId, remainingCount);
+
+        if (result?.raw) {
+          rawOutputs.push(result.raw);
+        }
+
+        const batchCards = Array.isArray(result?.flashcards)
+          ? result.flashcards
+          : [];
+
+        if (batchCards.length === 0) {
+          break;
+        }
+
+        collectedFlashcards.push(...batchCards);
+      }
+
+      const finalCards = shuffleFlashcardOptions(
+        collectedFlashcards.slice(0, targetCount)
+      );
+
+      setFlashcards(finalCards, rawOutputs.join("\n\n"));
+
+      if (!finalCards || finalCards.length === 0) {
         setError(
           "Flashcards were generated but could not be parsed into MCQ format."
         );
+      } else if (finalCards.length < targetCount) {
+        setSuccessMessage(
+          `${finalCards.length} flashcards generated. Backend returned fewer cards than selected.`
+        );
       } else {
-        setSuccessMessage(`${result.flashcards.length} flashcards generated.`);
+        setSuccessMessage(`${finalCards.length} flashcards generated.`);
       }
     } catch (err) {
       console.error("Generate flashcards error:", err);
@@ -180,6 +283,22 @@ export default function Flashcards() {
     clearFlashcards();
     clearError();
     clearSuccessMessage();
+  };
+
+  const handleResetFlashcardSession = () => {
+    clearFlashcards();
+    clearError();
+    clearSuccessMessage();
+
+    setFlashcardFiles([]);
+    setFlashcardSessionId("");
+    setFlashcardRagReady(false);
+    setFlashcardSessionSummary(null);
+    setFlashcardVectorStatus(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -199,11 +318,14 @@ export default function Flashcards() {
 
         <div className="flashcards-title-box">
           <h1>Generate Flashcards</h1>
-          <p>Practice MCQ flashcards generated from your uploaded PDF notes.</p>
+          <p>
+            Upload PDF docs and generate MCQ flashcards using a separate RAG
+            session.
+          </p>
         </div>
 
-        <Link to="/study-notes" className="flashcards-header-link">
-          Study from Notes
+        <Link to="/" className="flashcards-header-link">
+          Home
           <ExternalLink size={16} />
         </Link>
       </header>
@@ -213,13 +335,78 @@ export default function Flashcards() {
           <div className="flashcards-card">
             <div className="flashcards-card-title">
               <div className="flashcards-card-icon">
+                <UploadCloud size={22} />
+              </div>
+
+              <div>
+                <h2>Upload PDF Docs</h2>
+                <p>
+                  This upload is separate from Study from Notes and creates a
+                  separate flashcard RAG session.
+                </p>
+              </div>
+            </div>
+
+            <label className="flashcards-upload-box">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/pdf"
+                multiple
+                onChange={handleFlashcardFileChange}
+              />
+
+              <UploadCloud size={42} />
+              <strong>Click to select PDF docs</strong>
+              <span>Only PDF files are supported for flashcards</span>
+            </label>
+
+            {selectedFilesCount > 0 && (
+              <div className="flashcards-selected-files">
+                {flashcardFiles.map((file, index) => (
+                  <div
+                    key={`${file.name}-${index}`}
+                    className="flashcards-selected-file"
+                  >
+                    <FileText size={17} />
+                    <span>{file.name}</span>
+                    <small>{formatFileSize(file.size)}</small>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={handleUploadFlashcardDocs}
+              disabled={uploadingFlashcardDocs || selectedFilesCount === 0}
+              className="flashcards-primary-btn"
+            >
+              {uploadingFlashcardDocs ? (
+                <>
+                  <Loader2 size={19} className="flashcards-spin" />
+                  Processing PDFs...
+                </>
+              ) : (
+                <>
+                  <Sparkles size={19} />
+                  Upload & Process Docs
+                </>
+              )}
+            </button>
+          </div>
+
+          <div className="flashcards-card">
+            <div className="flashcards-card-title">
+              <div className="flashcards-card-icon">
                 <Brain size={22} />
               </div>
 
               <div>
                 <h2>Flashcard Setup</h2>
                 <p>
-                  Flashcards use the same RAG session from Study from Notes.
+                  Select how many cards you want to generate from the uploaded
+                  PDF docs.
                 </p>
               </div>
             </div>
@@ -239,8 +426,8 @@ export default function Flashcards() {
 
               <StatusItem
                 label="RAG Ready"
-                value={ragReady ? "Yes" : "No"}
-                good={ragReady}
+                value={flashcardRagReady ? "Yes" : "No"}
+                good={flashcardRagReady}
               />
 
               <StatusItem label="PDFs" value={String(totalPdfs)} />
@@ -248,8 +435,30 @@ export default function Flashcards() {
               <StatusItem label="Vectors" value={String(totalVectors)} />
               <StatusItem
                 label="Session"
-                value={sessionId ? shortSession(sessionId) : "None"}
+                value={
+                  flashcardSessionId ? shortSession(flashcardSessionId) : "None"
+                }
               />
+            </div>
+
+            <div className="flashcards-count-box">
+              <label htmlFor="flashcardCount">How many flashcards?</label>
+
+              <select
+                id="flashcardCount"
+                value={flashcardCount}
+                onChange={(event) =>
+                  setFlashcardCount(Number(event.target.value))
+                }
+                className="flashcards-count-select"
+              >
+                <option value={5}>5 cards</option>
+                <option value={10}>10 cards</option>
+                <option value={15}>15 cards</option>
+                <option value={20}>20 cards</option>
+                <option value={25}>25 cards</option>
+                <option value={30}>30 cards</option>
+              </select>
             </div>
 
             {backendError && (
@@ -259,19 +468,14 @@ export default function Flashcards() {
               </div>
             )}
 
-            {!sessionId || !ragReady ? (
+            {!flashcardSessionId || !flashcardRagReady ? (
               <div className="flashcards-note-box">
                 <UploadCloud size={26} />
-                <h3>Upload notes first</h3>
+                <h3>Upload PDF docs first</h3>
                 <p>
-                  Go to Study from Notes, upload PDF notes, then come back here
-                  to generate flashcards.
+                  Upload your PDFs here. This page creates a separate RAG
+                  session only for flashcard generation.
                 </p>
-
-                <Link to="/study-notes">
-                  Open Study from Notes
-                  <ExternalLink size={15} />
-                </Link>
               </div>
             ) : (
               <button
@@ -288,7 +492,7 @@ export default function Flashcards() {
                 ) : (
                   <>
                     <Sparkles size={19} />
-                    Generate Flashcards
+                    Generate {flashcardCount} Flashcards
                   </>
                 )}
               </button>
@@ -303,26 +507,20 @@ export default function Flashcards() {
               <RotateCcw size={17} />
               Clear Flashcards
             </button>
-          </div>
 
-          <div className="flashcards-card">
-            <div className="flashcards-card-title">
-              <div className="flashcards-card-icon">
-                <FileText size={22} />
-              </div>
-
-              <div>
-                <h2>How it works</h2>
-                <p>Simple RAG flashcard generation flow.</p>
-              </div>
-            </div>
-
-            <div className="flashcards-steps">
-              <StepItem number="1" text="Upload PDF notes in Study from Notes." />
-              <StepItem number="2" text="Backend extracts and chunks text." />
-              <StepItem number="3" text="ChromaDB stores note vectors." />
-              <StepItem number="4" text="Groq generates MCQ flashcards." />
-            </div>
+            <button
+              type="button"
+              onClick={handleResetFlashcardSession}
+              disabled={
+                uploadingFlashcardDocs ||
+                generatingFlashcards ||
+                (!flashcardSessionId && !flashcardFiles.length)
+              }
+              className="flashcards-secondary-btn"
+            >
+              <RotateCcw size={17} />
+              Reset Flashcard Session
+            </button>
           </div>
         </section>
 
@@ -366,27 +564,22 @@ export default function Flashcards() {
               <div className="flashcards-loading-box">
                 <Loader2 size={42} className="flashcards-spin" />
                 <h3>Generating flashcards...</h3>
-                <p>This may take a few seconds depending on your notes.</p>
+                <p>This may take a few seconds depending on your PDF docs.</p>
               </div>
             ) : !currentFlashcard ? (
               <div className="flashcards-empty-state">
                 <Brain size={54} />
                 <h3>No flashcards generated yet</h3>
                 <p>
-                  Generate flashcards after uploading and processing notes in
-                  Study from Notes.
+                  Upload PDF docs on this page, select how many cards you want,
+                  and generate flashcards from this separate RAG session.
                 </p>
 
                 <div className="flashcards-empty-actions">
-                  <Link to="/study-notes" className="flashcards-secondary-link">
-                    <BookOpen size={17} />
-                    Study from Notes
-                  </Link>
-
                   <button
                     type="button"
                     onClick={handleGenerateFlashcards}
-                    disabled={!sessionId || !ragReady}
+                    disabled={!flashcardSessionId || !flashcardRagReady}
                     className="flashcards-primary-small-btn"
                   >
                     <Sparkles size={17} />
@@ -557,13 +750,72 @@ function StatusItem({ label, value, good = false }) {
   );
 }
 
-function StepItem({ number, text }) {
-  return (
-    <div className="flashcards-step-item">
-      <span>{number}</span>
-      <p>{text}</p>
-    </div>
-  );
+function shuffleFlashcardOptions(cards) {
+  if (!Array.isArray(cards)) {
+    return [];
+  }
+
+  return cards.map((card, cardIndex) => {
+    const originalOptions = card?.options || {};
+    const originalCorrect = String(card?.correct || "C").trim().toUpperCase();
+    const correctText = originalOptions[originalCorrect];
+
+    const optionValues = ["A", "B", "C", "D"]
+      .map((key) => originalOptions[key])
+      .filter((value) => value !== undefined && value !== null && value !== "");
+
+    if (optionValues.length < 4 || !correctText) {
+      return card;
+    }
+
+    const shuffledValues = deterministicShuffle(optionValues, cardIndex);
+    const letters = ["A", "B", "C", "D"];
+
+    const newOptions = {};
+    let newCorrect = "A";
+
+    letters.forEach((letter, index) => {
+      newOptions[letter] = shuffledValues[index];
+
+      if (shuffledValues[index] === correctText) {
+        newCorrect = letter;
+      }
+    });
+
+    return {
+      ...card,
+      options: newOptions,
+      correct: newCorrect,
+    };
+  });
+}
+
+function deterministicShuffle(items, seed) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = (seed + index * 7 + 3) % (index + 1);
+    const temp = shuffled[index];
+
+    shuffled[index] = shuffled[swapIndex];
+    shuffled[swapIndex] = temp;
+  }
+
+  return shuffled;
+}
+
+function formatFileSize(sizeBytes) {
+  if (!sizeBytes) {
+    return "0 KB";
+  }
+
+  const sizeKb = sizeBytes / 1024;
+
+  if (sizeKb < 1024) {
+    return `${sizeKb.toFixed(1)} KB`;
+  }
+
+  return `${(sizeKb / 1024).toFixed(2)} MB`;
 }
 
 function shortSession(sessionId) {

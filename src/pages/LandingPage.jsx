@@ -1,355 +1,22 @@
-// import React, { useRef } from "react";
-// import { Link, useNavigate } from "react-router";
-// import {
-//   Mic,
-//   Eye,
-//   BarChart,
-//   History,
-//   PlayCircle,
-//   Star,
-//   ShieldCheck,
-//   Zap,
-//   ArrowRight,
-//   CheckCircle2,
-//   Users,
-//   Sparkles,
-//   LogOut,
-//   LayoutDashboard,
-// } from "lucide-react";
-
-// import { useAuthStore } from "../store/useAuthStore.js";
-// import "./LandingPage.css";
-
-// export default function LandingPage() {
-//   const featuresRef = useRef(null);
-//   const navigate = useNavigate();
-
-//   const { user, signOut } = useAuthStore();
-
-//   const scrollToFeatures = (event) => {
-//     event.preventDefault();
-
-//     if (featuresRef.current) {
-//       featuresRef.current.scrollIntoView({
-//         behavior: "smooth",
-//       });
-//     }
-//   };
-
-//   const handleLogout = async () => {
-//     await signOut();
-//     navigate("/");
-//   };
-
-//   return (
-//     <div className="landing-page">
-//       {/* Decorative Background Gradients */}
-//       <div className="landing-gradient landing-gradient-one"></div>
-//       <div className="landing-gradient landing-gradient-two"></div>
-//       <div className="landing-gradient landing-gradient-three"></div>
-
-//       {/* Header */}
-//       <header className="landing-header">
-//         <Link to="/" className="landing-logo">
-//           <div className="landing-logo-icon">
-//             <Mic size={21} />
-//           </div>
-
-//           <span>InterviewIQ</span>
-//         </Link>
-
-//         <nav className="landing-nav">
-//           <a
-//             href="#features"
-//             onClick={scrollToFeatures}
-//             className="landing-nav-link landing-features-link"
-//           >
-//             Features
-//           </a>
-
-//           {!user ? (
-//             <>
-//               <Link to="/login" className="landing-nav-link">
-//                 Login
-//               </Link>
-
-//               <Link to="/setup" className="landing-header-btn">
-//                 Get Started
-//               </Link>
-//             </>
-//           ) : (
-//             <>
-//               <Link to="/dashboard" className="landing-nav-link landing-dashboard-link">
-//                 <LayoutDashboard size={17} />
-//                 Dashboard
-//               </Link>
-
-//               <button
-//                 type="button"
-//                 onClick={handleLogout}
-//                 className="landing-logout-btn"
-//               >
-//                 <LogOut size={17} />
-//                 Logout
-//               </button>
-
-//               <Link to="/setup" className="landing-header-btn">
-//                 Practice Now
-//               </Link>
-//             </>
-//           )}
-//         </nav>
-//       </header>
-
-//       <main className="landing-main">
-//         {/* Hero Section */}
-//         <section className="landing-hero">
-//           <div className="landing-ai-badge">
-//             <Sparkles size={17} />
-//             <span>Powered by Gemini 2.5 Flash AI</span>
-//           </div>
-
-//           <h1>
-//             Ace Every Interview.
-//             <br />
-//             <span>Practice with AI.</span>
-//           </h1>
-
-//           <p>
-//             Your AI interview coach that listens, responds, and gives real-time
-//             behavioral feedback on your eye contact, posture, and communication
-//             skills. Just like practicing with a real mentor — but available
-//             anytime.
-//           </p>
-
-//           <div className="landing-hero-actions">
-//             <Link to="/setup" className="landing-primary-action">
-//               <PlayCircle size={21} />
-//               <span>Start Free Practice</span>
-//               <ArrowRight className="landing-action-arrow" size={21} />
-//             </Link>
-
-//             {user ? (
-//               <Link to="/dashboard" className="landing-secondary-action">
-//                 View Dashboard
-//               </Link>
-//             ) : (
-//               <Link to="/login" className="landing-secondary-action">
-//                 View Dashboard
-//               </Link>
-//             )}
-//           </div>
-//         </section>
-
-//         {/* How It Works */}
-//         <section className="landing-steps-grid">
-//           <StepCard
-//             number="1"
-//             title="Pick Your Topic"
-//             description="Choose HR, Technical, or paste a custom Job Description."
-//           />
-
-//           <StepCard
-//             number="2"
-//             title="Talk to Your AI Coach"
-//             description="Real-time voice conversation with instant feedback on each answer."
-//           />
-
-//           <StepCard
-//             number="3"
-//             title="Get Your Report"
-//             description="Detailed performance report with actionable improvement tips."
-//           />
-//         </section>
-
-//         {/* Value Proposition */}
-//         <section className="landing-value-section">
-//           <div className="landing-value-content">
-//             <div className="landing-value-text">
-//               <h2>
-//                 Practice makes <span>perfect</span>
-//               </h2>
-
-//               <p>
-//                 Most people find it hard to express themselves in front of an
-//                 interviewer. InterviewIQ gives you a safe space to practice as
-//                 many times as you want — the AI coach gives feedback on every
-//                 answer, just like a real mentor would.
-//               </p>
-
-//               <div className="landing-check-list">
-//                 <CheckPoint text="Practice unlimited times, no judgment" />
-//                 <CheckPoint text="Get instant feedback on every response" />
-//                 <CheckPoint text="Track your progress over multiple sessions" />
-//                 <CheckPoint text="Upload your resume for personalized questions" />
-//               </div>
-//             </div>
-
-//             <div className="landing-value-visual">
-//               <div className="landing-session-card">
-//                 <Users size={68} />
-
-//                 <div className="landing-session-info">
-//                   <strong>15</strong>
-//                   <span>AI-guided questions per session</span>
-//                   <small>30-40 min interview simulation</small>
-//                 </div>
-
-//                 <div className="landing-free-badge">Free to use</div>
-//               </div>
-//             </div>
-//           </div>
-//         </section>
-
-//         {/* Features Grid */}
-//         <section
-//           ref={featuresRef}
-//           id="features"
-//           className="landing-features-section"
-//         >
-//           <div className="landing-section-heading">
-//             <h2>Why InterviewIQ?</h2>
-//             <p>Professional interview coaching tools — available for free.</p>
-//           </div>
-
-//           <div className="landing-features-grid">
-//             <FeatureCard
-//               icon={<Eye size={34} />}
-//               color="secondary"
-//               title="Live Behavioral Coaching"
-//               description="MediaPipe vision engine analyzes your webcam feed to coach you on eye contact and posture in real-time."
-//             />
-
-//             <FeatureCard
-//               icon={<Mic size={34} />}
-//               color="primary"
-//               title="Voice Conversation"
-//               description="Natural voice-to-voice conversation with the AI. It speaks, you speak — just like a real interview."
-//             />
-
-//             <FeatureCard
-//               icon={<BarChart size={34} />}
-//               color="secondary"
-//               title="Detailed Score Report"
-//               description="Get 0-10 breakdowns for communication, confidence, body language, and more with actionable tips."
-//             />
-
-//             <FeatureCard
-//               icon={<History size={34} />}
-//               color="primary"
-//               title="Progress Tracking"
-//               description="Dashboard charts track how much you improve session after session. See your growth over time."
-//             />
-
-//             <FeatureCard
-//               icon={<Star size={34} />}
-//               color="secondary"
-//               title="Achievement Badges"
-//               description="Earn badges like 'Eye Contact Pro' and '90+ Club' to stay motivated and challenge yourself."
-//             />
-
-//             <FeatureCard
-//               icon={<ShieldCheck size={34} />}
-//               color="primary"
-//               title="Resume & JD-Aware"
-//               description="Upload your resume or paste a Job Description — the AI tailors questions specifically for your profile."
-//             />
-//           </div>
-//         </section>
-//       </main>
-
-//       <footer className="landing-footer">
-//         <p>
-//           © 2026 InterviewIQ. Built for students and job seekers.
-//           <span> Practice → Improve → Ace it.</span>
-//         </p>
-//       </footer>
-//     </div>
-//   );
-// }
-
-// function StepCard({ number, title, description }) {
-//   return (
-//     <div className="landing-step-card">
-//       <span>{number}</span>
-//       <h3>{title}</h3>
-//       <p>{description}</p>
-//     </div>
-//   );
-// }
-
-// function CheckPoint({ text }) {
-//   return (
-//     <div className="landing-check-item">
-//       <CheckCircle2 size={21} />
-//       <span>{text}</span>
-//     </div>
-//   );
-// }
-
-// function FeatureCard({ icon, color, title, description }) {
-//   return (
-//     <div className="landing-feature-card">
-//       <div className={`landing-feature-icon landing-feature-icon-${color}`}>
-//         {icon}
-//       </div>
-
-//       <h3>{title}</h3>
-
-//       <p>{description}</p>
-//     </div>
-//   );
-// }
-
 import React, { useRef } from "react";
 import { Link, useNavigate } from "react-router";
-import {
-  Mic,
-  Eye,
-  BarChart,
-  History,
-  PlayCircle,
-  Star,
-  ShieldCheck,
-  Zap,
-  ArrowRight,
-  CheckCircle2,
-  Users,
-  Sparkles,
-  LogOut,
-  LayoutDashboard,
-  BookOpen,
-  Brain,
-  ClipboardCheck,
-  FileText,
-  GraduationCap,
-} from "lucide-react";
 
 import { useAuthStore } from "../store/useAuthStore.js";
 import "./LandingPage.css";
 
 export default function LandingPage() {
-  const featuresRef = useRef(null);
-  const ragToolsRef = useRef(null);
-  const navigate = useNavigate();
+  const servicesRef = useRef(null);
+  const workflowRef = useRef(null);
+  const developerRef = useRef(null);
 
+  const navigate = useNavigate();
   const { user, signOut } = useAuthStore();
 
-  const scrollToFeatures = (event) => {
+  const scrollToSection = (event, sectionRef) => {
     event.preventDefault();
 
-    if (featuresRef.current) {
-      featuresRef.current.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const scrollToRagTools = (event) => {
-    event.preventDefault();
-
-    if (ragToolsRef.current) {
-      ragToolsRef.current.scrollIntoView({
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({
         behavior: "smooth",
       });
     }
@@ -362,16 +29,20 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page">
-      {/* Decorative Background Gradients */}
+      {/* Background Layers */}
       <div className="landing-gradient landing-gradient-one"></div>
       <div className="landing-gradient landing-gradient-two"></div>
       <div className="landing-gradient landing-gradient-three"></div>
+      <div className="landing-gradient landing-gradient-four"></div>
 
-      {/* Header */}
+      <div className="landing-grid-bg"></div>
+      <div className="landing-noise-bg"></div>
+
+      {/* Navbar */}
       <header className="landing-header">
         <Link to="/" className="landing-logo">
           <div className="landing-logo-icon">
-            <Mic size={21} />
+            <Icon symbol="🎙" size={21} />
           </div>
 
           <span>InterviewIQ</span>
@@ -379,28 +50,28 @@ export default function LandingPage() {
 
         <nav className="landing-nav">
           <a
-            href="#features"
-            onClick={scrollToFeatures}
-            className="landing-nav-link landing-features-link"
+            href="#services"
+            onClick={(event) => scrollToSection(event, servicesRef)}
+            className="landing-nav-link"
           >
-            Features
+            Services
           </a>
 
           <a
-            href="#rag-tools"
-            onClick={scrollToRagTools}
-            className="landing-nav-link landing-features-link"
+            href="#workflow"
+            onClick={(event) => scrollToSection(event, workflowRef)}
+            className="landing-nav-link"
           >
-            AI Tools
+            Workflow
           </a>
 
-          <Link to="/study-notes" className="landing-nav-link">
-            Study Notes
-          </Link>
-
-          <Link to="/resume-gap-finder" className="landing-nav-link">
-            Resume Gap
-          </Link>
+          <a
+            href="#developers"
+            onClick={(event) => scrollToSection(event, developerRef)}
+            className="landing-nav-link"
+          >
+            Developers
+          </a>
 
           {!user ? (
             <>
@@ -418,8 +89,8 @@ export default function LandingPage() {
                 to="/dashboard"
                 className="landing-nav-link landing-dashboard-link"
               >
-                <LayoutDashboard size={17} />
-                Dashboard
+                <Icon symbol="▣" size={17} />
+                <span>Dashboard</span>
               </Link>
 
               <button
@@ -427,8 +98,8 @@ export default function LandingPage() {
                 onClick={handleLogout}
                 className="landing-logout-btn"
               >
-                <LogOut size={17} />
-                Logout
+                <Icon symbol="↪" size={17} />
+                <span>Logout</span>
               </button>
 
               <Link to="/setup" className="landing-header-btn">
@@ -440,279 +111,442 @@ export default function LandingPage() {
       </header>
 
       <main className="landing-main">
-        {/* Hero Section */}
+        {/* Hero */}
         <section className="landing-hero">
-          <div className="landing-ai-badge">
-            <Sparkles size={17} />
-            <span>AI Interview + RAG Study Assistant</span>
+          <div className="landing-hero-left">
+            <div className="landing-ai-badge">
+              <Icon symbol="✦" size={17} />
+              <span>AI Interview Practice + RAG Study Assistant</span>
+            </div>
+
+            <h1>
+              Prepare Smarter.
+              <br />
+              <span>Ace Every Interview.</span>
+            </h1>
+
+            <p>
+              InterviewIQ helps you practice mock interviews, study from PDF
+              notes, find resume gaps, and generate flashcards using AI-powered
+              preparation tools made for students and job seekers.
+            </p>
+
+            <div className="landing-hero-actions">
+              <Link to="/setup" className="landing-primary-action">
+                <Icon symbol="▶" size={21} />
+                <span>Start Interview Practice</span>
+                <Icon
+                  symbol="→"
+                  size={21}
+                  className="landing-action-arrow"
+                />
+              </Link>
+
+              <Link to="/study-notes" className="landing-secondary-action">
+                Study from Notes
+              </Link>
+            </div>
+
+            <div className="landing-hero-trust-row">
+              <TrustItem text="AI mock interview" />
+              <TrustItem text="PDF-based study help" />
+              <TrustItem text="Resume gap analysis" />
+            </div>
           </div>
 
-          <h1>
-            Ace Every Interview.
-            <br />
-            <span>Practice with AI.</span>
-          </h1>
+          <div className="landing-hero-right">
+            <div className="landing-hero-dashboard-card">
+              <div className="landing-dashboard-card-header">
+                <div>
+                  <span className="landing-dashboard-mini-label">
+                    Preparation System
+                  </span>
 
-          <p>
-            Your AI interview coach that helps you practice voice interviews,
-            study from PDF notes, generate flashcards, and compare your resume
-            with job descriptions using RAG-powered AI tools.
-          </p>
+                  <h3>InterviewIQ AI Tools</h3>
+                </div>
 
-          <div className="landing-hero-actions">
-            <Link to="/setup" className="landing-primary-action">
-              <PlayCircle size={21} />
-              <span>Start Interview Practice</span>
-              <ArrowRight className="landing-action-arrow" size={21} />
-            </Link>
+                <div className="landing-dashboard-status">
+                  <span></span>
+                  Live
+                </div>
+              </div>
 
-            <Link to="/study-notes" className="landing-secondary-action">
-              Study from Notes
-            </Link>
-          </div>
+              <div className="landing-score-circle">
+                <strong>4</strong>
+                <span>Smart Tools</span>
+              </div>
 
-          <div className="landing-quick-tools">
-            <QuickTool
-              to="/study-notes"
-              icon={<BookOpen size={18} />}
-              title="Study from Notes"
-            />
+              <div className="landing-score-list">
+                <InfoRow
+                  title="Interview Practice"
+                  text="Voice-based mock interview preparation"
+                  value="AI"
+                />
 
-            <QuickTool
-              to="/resume-gap-finder"
-              icon={<ClipboardCheck size={18} />}
-              title="Resume Gap Finder"
-            />
+                <InfoRow
+                  title="Study Notes"
+                  text="Ask questions from uploaded PDF notes"
+                  value="RAG"
+                />
 
-            <QuickTool
-              to="/flashcards"
-              icon={<Brain size={18} />}
-              title="Generate Flashcards"
-            />
+                <InfoRow
+                  title="Resume Gap"
+                  text="Compare resume with job description"
+                  value="JD"
+                />
+              </div>
+
+              <div className="landing-dashboard-card-footer">
+                <Icon symbol="🧠" size={18} />
+                <span>Choose one tool and start improving today.</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* How It Works */}
-        <section className="landing-steps-grid">
-          <StepCard
-            number="1"
-            title="Pick Your Topic"
-            description="Choose HR, Technical, General, or paste a custom Job Description."
-          />
-
-          <StepCard
-            number="2"
-            title="Talk to Your AI Coach"
-            description="Real-time voice conversation with instant interview-style practice."
-          />
-
-          <StepCard
-            number="3"
-            title="Get Your Report"
-            description="Detailed performance report with transcript, score, and improvement tips."
-          />
+        {/* Stats */}
+        <section className="landing-stats-section">
+          <StatCard icon="🎙" title="Mock" text="Interview Practice" />
+          <StatCard icon="📘" title="RAG" text="Study from Notes" />
+          <StatCard icon="✓" title="JD" text="Resume Matching" />
+          <StatCard icon="🧠" title="MCQ" text="Flashcard Revision" />
         </section>
 
-        {/* RAG Tools Section */}
+        {/* Services */}
         <section
-          ref={ragToolsRef}
-          id="rag-tools"
-          className="landing-rag-tools-section"
+          ref={servicesRef}
+          id="services"
+          className="landing-services-section"
         >
           <div className="landing-section-heading">
-            <h2>AI Study & Resume Tools</h2>
+            <span className="landing-section-label">Our Services</span>
+
+            <h2>Choose how you want to prepare</h2>
+
             <p>
-              Use your FastAPI RAG backend to study notes, generate flashcards,
-              and find resume gaps.
+              Everything you need for placement preparation is available in one
+              place. Start with interview practice, revise notes, check resume
+              gaps, or generate flashcards.
             </p>
           </div>
 
-          <div className="landing-rag-tools-grid">
-            <RagToolCard
+          <div className="landing-services-grid">
+            <ServiceCard
+              to="/setup"
+              icon="🎙"
+              title="Start Interview Practice"
+              description="Practice real interview questions with AI and get structured feedback after every session."
+              buttonText="Start Practice"
+              tag="Mock Interview"
+              points={[
+                "Voice-based interview practice",
+                "HR, technical, and custom JD questions",
+                "Detailed report after every session",
+              ]}
+            />
+
+            <ServiceCard
               to="/study-notes"
-              icon={<BookOpen size={34} />}
+              icon="📘"
               title="Study from Notes"
-              description="Upload PDF notes, ask questions, summarize topics, and generate viva/interview questions from your own material."
+              description="Upload PDF notes and ask questions directly from your own study material."
+              buttonText="Open Notes Assistant"
               tag="PDF RAG"
+              points={[
+                "Upload PDF notes",
+                "Ask questions from your content",
+                "Get summarized answers",
+              ]}
             />
 
-            <RagToolCard
+            <ServiceCard
               to="/resume-gap-finder"
-              icon={<ClipboardCheck size={34} />}
+              icon="✓"
               title="Resume Gap Finder"
-              description="Upload your resume, paste a job description, and get match percentage, missing skills, weak areas, and improvement tips."
+              description="Compare your resume with a job description and find missing skills before applying."
+              buttonText="Check Resume Gap"
               tag="Resume + JD"
+              points={[
+                "Resume and JD comparison",
+                "Skill gap detection",
+                "Improvement suggestions",
+              ]}
             />
 
-            <RagToolCard
+            <ServiceCard
               to="/flashcards"
-              icon={<Brain size={34} />}
+              icon="🧠"
               title="Generate Flashcards"
-              description="Create MCQ flashcards from uploaded notes and practice with answer checking, explanation, and source references."
-              tag="MCQ Practice"
+              description="Create MCQ flashcards from notes and revise important concepts quickly."
+              buttonText="Generate Flashcards"
+              tag="Smart Revision"
+              points={[
+                "Generate MCQ questions",
+                "Practice with options",
+                "Revise important topics quickly",
+              ]}
             />
           </div>
         </section>
 
-        {/* Value Proposition */}
-        <section className="landing-value-section">
-          <div className="landing-value-content">
-            <div className="landing-value-text">
-              <h2>
-                Practice makes <span>perfect</span>
-              </h2>
-
-              <p>
-                Most people find it hard to express themselves in front of an
-                interviewer. InterviewIQ gives you a safe space to practice,
-                revise from your notes, and improve your resume direction before
-                applying.
-              </p>
-
-              <div className="landing-check-list">
-                <CheckPoint text="Practice unlimited times, no judgment" />
-                <CheckPoint text="Get instant feedback on every response" />
-                <CheckPoint text="Study from your uploaded PDF notes" />
-                <CheckPoint text="Generate flashcards for quick revision" />
-                <CheckPoint text="Find resume gaps using job descriptions" />
-              </div>
-            </div>
-
-            <div className="landing-value-visual">
-              <div className="landing-session-card">
-                <Users size={68} />
-
-                <div className="landing-session-info">
-                  <strong>3</strong>
-                  <span>AI-powered preparation modes</span>
-                  <small>Interview + Notes RAG + Resume Gap Finder</small>
-                </div>
-
-                <div className="landing-free-badge">Free to use</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Grid */}
+        {/* Workflow */}
         <section
-          ref={featuresRef}
-          id="features"
-          className="landing-features-section"
+          ref={workflowRef}
+          id="workflow"
+          className="landing-workflow-section"
         >
           <div className="landing-section-heading">
-            <h2>Why InterviewIQ?</h2>
-            <p>Professional interview coaching tools — available for free.</p>
+            <span className="landing-section-label">Simple Workflow</span>
+
+            <h2>How InterviewIQ works</h2>
+
+            <p>
+              Select a preparation tool, add your content, let AI process it,
+              and improve using the result.
+            </p>
           </div>
 
-          <div className="landing-features-grid">
-            <FeatureCard
-              icon={<Eye size={34} />}
-              color="secondary"
-              title="Live Behavioral Coaching"
-              description="Camera-based feedback can help you improve confidence, eye contact, and posture during interview practice."
+          <div className="landing-workflow-grid">
+            <WorkflowCard
+              number="01"
+              icon="👥"
+              title="Choose your goal"
+              description="Pick interview practice, notes assistant, resume gap finder, or flashcards."
             />
 
-            <FeatureCard
-              icon={<Mic size={34} />}
-              color="primary"
-              title="Voice Conversation"
-              description="Natural voice-to-voice conversation with AI. It speaks, you speak — just like a real interview."
+            <WorkflowCard
+              number="02"
+              icon="□"
+              title="Add your content"
+              description="Upload notes, resume, or paste a job description depending on the tool."
             />
 
-            <FeatureCard
-              icon={<BarChart size={34} />}
-              color="secondary"
-              title="Detailed Score Report"
-              description="Get 0-10 breakdowns for communication, confidence, body language, transcript, and session duration."
+            <WorkflowCard
+              number="03"
+              icon="🧠"
+              title="AI processes it"
+              description="The system uses AI and RAG logic to create useful preparation output."
             />
 
-            <FeatureCard
-              icon={<BookOpen size={34} />}
-              color="primary"
-              title="RAG Notes Assistant"
-              description="Upload notes and ask questions from your own PDFs using FastAPI, ChromaDB, embeddings, and Groq."
-            />
-
-            <FeatureCard
-              icon={<Brain size={34} />}
-              color="secondary"
-              title="Flashcard Generator"
-              description="Generate MCQ flashcards from notes with options, correct answer, explanation, and source reference."
-            />
-
-            <FeatureCard
-              icon={<ShieldCheck size={34} />}
-              color="primary"
-              title="Resume & JD-Aware"
-              description="Compare resume with job description and get missing skills, match score, and resume improvement suggestions."
+            <WorkflowCard
+              number="04"
+              icon="▥"
+              title="Improve faster"
+              description="Use feedback, flashcards, and reports to improve your preparation."
             />
           </div>
         </section>
       </main>
 
-      <footer className="landing-footer">
-        <p>
-          © 2026 InterviewIQ. Built for students and job seekers.
-          <span> Practice → Study → Improve → Ace it.</span>
-        </p>
+      {/* Footer */}
+      <footer ref={developerRef} id="developers" className="landing-footer">
+        <div className="landing-footer-content">
+          <div className="landing-footer-brand">
+            <Link to="/" className="landing-footer-logo">
+              <div className="landing-logo-icon">
+                <Icon symbol="🎙" size={20} />
+              </div>
+
+              <span>InterviewIQ</span>
+            </Link>
+
+            <p>
+              AI-powered interview preparation platform built for students,
+              freshers, and job seekers.
+            </p>
+
+            <div className="landing-footer-mini-points">
+              <span>Practice</span>
+              <Icon symbol="→" size={15} />
+              <span>Study</span>
+              <Icon symbol="→" size={15} />
+              <span>Improve</span>
+              <Icon symbol="→" size={15} />
+              <span>Ace it</span>
+            </div>
+          </div>
+
+          <div className="landing-footer-links">
+            <h3>Quick Links</h3>
+
+            <Link to="/setup">Start Interview Practice</Link>
+            <Link to="/study-notes">Study from Notes</Link>
+            <Link to="/resume-gap-finder">Resume Gap Finder</Link>
+            <Link to="/flashcards">Generate Flashcards</Link>
+            <Link to="/dashboard">Dashboard</Link>
+          </div>
+
+          <div className="landing-footer-dev">
+            <h3>Developer Details</h3>
+
+            <div className="landing-developer-card">
+              <div className="landing-developer-avatar">
+                <Icon symbol="👤" size={34} />
+              </div>
+
+              <div className="landing-developer-info">
+                <h4>Sparsh Srivastava</h4>
+
+                <p>
+                  Full Stack Developer | AI & RAG Project Developer | React,
+                  FastAPI, Supabase, Groq, LangChain, and modern web
+                  technologies.
+                </p>
+
+                <div className="landing-footer-socials">
+                  <a
+                    href="https://github.com/Sp-bit-code"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="GitHub"
+                  >
+                    <Icon symbol="⌘" size={19} />
+                    GitHub
+                  </a>
+
+                  <a
+                    href="https://www.linkedin.com/in/sparsh-srivastava-621882289/"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="LinkedIn"
+                  >
+                    <Icon symbol="in" size={19} />
+                    LinkedIn
+                  </a>
+
+                  <a
+                    href="https://www.instagram.com/sp_02arsh_/"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Instagram"
+                  >
+                    <Icon symbol="◎" size={19} />
+                    Instagram
+                  </a>
+
+                  <a href="mailto:sparshsrivastava@example.com">
+                    <Icon symbol="✉" size={19} />
+                    Email
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="landing-footer-bottom">
+          <p>
+            © 2026 InterviewIQ. Built for students and job seekers.
+            <span> Practice → Study → Improve → Ace it.</span>
+          </p>
+        </div>
       </footer>
     </div>
   );
 }
 
-function QuickTool({ to, icon, title }) {
+function Icon({ symbol, size = 18, className = "" }) {
   return (
-    <Link to={to} className="landing-quick-tool">
-      {icon}
-      <span>{title}</span>
-    </Link>
+    <span
+      className={`landing-text-icon ${className}`}
+      style={{
+        width: size,
+        height: size,
+        minWidth: size,
+        fontSize: Math.max(12, size * 0.72),
+        lineHeight: `${size}px`,
+      }}
+      aria-hidden="true"
+    >
+      {symbol}
+    </span>
   );
 }
 
-function StepCard({ number, title, description }) {
+function TrustItem({ text }) {
   return (
-    <div className="landing-step-card">
-      <span>{number}</span>
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
-
-function CheckPoint({ text }) {
-  return (
-    <div className="landing-check-item">
-      <CheckCircle2 size={21} />
+    <div className="landing-trust-item">
+      <Icon symbol="✓" size={18} />
       <span>{text}</span>
     </div>
   );
 }
 
-function RagToolCard({ to, icon, title, description, tag }) {
+function InfoRow({ title, text, value }) {
   return (
-    <Link to={to} className="landing-rag-tool-card">
-      <div className="landing-rag-tool-top">
-        <div className="landing-rag-tool-icon">{icon}</div>
-        <span>{tag}</span>
+    <div className="landing-score-item">
+      <div>
+        <span>{title}</span>
+        <small>{text}</small>
       </div>
 
-      <h3>{title}</h3>
-      <p>{description}</p>
-
-      <div className="landing-rag-tool-link">
-        Open Tool
-        <ArrowRight size={17} />
-      </div>
-    </Link>
+      <strong>{value}</strong>
+    </div>
   );
 }
 
-function FeatureCard({ icon, color, title, description }) {
+function StatCard({ icon, title, text }) {
   return (
-    <div className="landing-feature-card">
-      <div className={`landing-feature-icon landing-feature-icon-${color}`}>
-        {icon}
+    <div className="landing-stat-card">
+      <div className="landing-stat-icon">
+        <Icon symbol={icon} size={24} />
+      </div>
+
+      <strong>{title}</strong>
+      <span>{text}</span>
+    </div>
+  );
+}
+
+function ServiceCard({
+  to,
+  icon,
+  title,
+  description,
+  buttonText,
+  tag,
+  points = [],
+}) {
+  return (
+    <div className="landing-service-card">
+      <div className="landing-service-card-top">
+        <div className="landing-service-icon">
+          <Icon symbol={icon} size={38} />
+        </div>
+
+        <span className="landing-service-tag">{tag}</span>
+      </div>
+
+      <h3>{title}</h3>
+
+      <p>{description}</p>
+
+      <div className="landing-service-points">
+        {points.map((point) => (
+          <div className="landing-service-point" key={point}>
+            <Icon symbol="✓" size={17} />
+            <span>{point}</span>
+          </div>
+        ))}
+      </div>
+
+      <Link to={to} className="landing-service-btn">
+        <span>{buttonText}</span>
+        <Icon symbol="→" size={18} />
+      </Link>
+    </div>
+  );
+}
+
+function WorkflowCard({ number, icon, title, description }) {
+  return (
+    <div className="landing-workflow-card">
+      <div className="landing-workflow-card-top">
+        <span>{number}</span>
+
+        <div className="landing-workflow-icon">
+          <Icon symbol={icon} size={28} />
+        </div>
       </div>
 
       <h3>{title}</h3>

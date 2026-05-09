@@ -1559,8 +1559,8 @@ export default function StudyNotes() {
           <p>Upload PDFs and study using RAG, LangChain, ChromaDB, and Groq.</p>
         </div>
 
-        <Link to="/resume-gap-finder" className="study-notes-header-link">
-          Resume Gap Finder
+        <Link to="/" className="study-notes-header-link">
+          Home
           <ExternalLink size={16} />
         </Link>
       </header>
@@ -1748,15 +1748,6 @@ export default function StudyNotes() {
                 active={activeTool === "questions"}
                 loading={generatingQuestions}
                 onClick={handleGenerateQuestions}
-              />
-
-              <ToolButton
-                title="Flashcards"
-                desc="Generate MCQ cards"
-                icon={<Brain size={21} />}
-                active={activeTool === "flashcards"}
-                loading={generatingFlashcards}
-                onClick={handleGenerateFlashcards}
               />
             </div>
 

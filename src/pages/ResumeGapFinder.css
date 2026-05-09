@@ -1,13 +1,63 @@
-.resume-gap-page {
-  min-height: 100vh;
+:root {
+  --resume-bg: #050505;
+  --resume-bg-soft: #090909;
+
+  --resume-card: rgba(0, 0, 0, 0.28);
+  --resume-card-soft: rgba(255, 255, 255, 0.045);
+  --resume-card-hover: rgba(255, 255, 255, 0.065);
+
+  --resume-text: #f8fafc;
+  --resume-muted: #a1a1aa;
+  --resume-muted-soft: #71717a;
+
+  --resume-border: rgba(255, 255, 255, 0.105);
+  --resume-border-strong: rgba(255, 255, 255, 0.18);
+
+  --resume-white: #ffffff;
+  --resume-black: #050505;
+
+  --resume-success: #22c55e;
+  --resume-success-soft: rgba(34, 197, 94, 0.12);
+  --resume-success-border: rgba(34, 197, 94, 0.32);
+
+  --resume-error: #ef4444;
+  --resume-error-soft: rgba(239, 68, 68, 0.12);
+  --resume-error-border: rgba(239, 68, 68, 0.32);
+
+  --resume-radius-sm: 12px;
+  --resume-radius-md: 18px;
+  --resume-radius-lg: 24px;
+  --resume-radius-xl: 30px;
+
+  --resume-shadow-soft: 0 18px 55px rgba(0, 0, 0, 0.28);
+  --resume-shadow-card: 0 26px 80px rgba(0, 0, 0, 0.35);
+
+  --resume-transition: 0.24s ease;
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
   width: 100%;
-  position: relative;
+  min-height: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 14% 10%, rgba(124, 58, 237, 0.24), transparent 34%),
-    radial-gradient(circle at 86% 90%, rgba(6, 182, 212, 0.18), transparent 36%),
-    #070b14;
-  color: #f8fafc;
+  overflow-y: auto;
+  background: #050505;
+  color: #ffffff;
+}
+
+body {
   font-family:
     Inter,
     ui-sans-serif,
@@ -18,97 +68,213 @@
     sans-serif;
 }
 
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button,
+a,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.resume-gap-page {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: visible;
+  color: var(--resume-text);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.045), transparent 32%),
+    radial-gradient(circle at 90% 18%, rgba(255, 255, 255, 0.026), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.035), transparent 36%),
+    #050505;
+}
+
+.resume-gap-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.035), transparent 34%),
+    radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.025), transparent 34%),
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.28)
+    );
+}
+
+.resume-gap-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.13;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 72%);
+}
+
+/* =========================================================
+   BACKGROUND BLOBS
+   ========================================================= */
+
 .resume-gap-bg {
   position: fixed;
   border-radius: 999px;
   pointer-events: none;
-  filter: blur(110px);
+  filter: blur(130px);
   opacity: 0.55;
-  z-index: 0;
+  z-index: 1;
 }
 
 .resume-gap-bg-one {
-  width: 370px;
-  height: 370px;
-  top: -130px;
-  left: -130px;
-  background: rgba(124, 58, 237, 0.34);
+  width: 390px;
+  height: 390px;
+  top: -140px;
+  left: -140px;
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .resume-gap-bg-two {
-  width: 420px;
-  height: 420px;
-  right: -170px;
-  bottom: -160px;
-  background: rgba(6, 182, 212, 0.25);
+  width: 450px;
+  height: 450px;
+  right: -180px;
+  bottom: -170px;
+  background: rgba(255, 255, 255, 0.028);
 }
 
+/* =========================================================
+   HEADER
+   ========================================================= */
+
 .resume-gap-header {
-  position: relative;
-  z-index: 2;
-  min-height: 78px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-  background: rgba(7, 11, 20, 0.78);
-  backdrop-filter: blur(18px);
+  width: min(1820px, calc(100% - 36px));
+  min-height: 64px;
+  margin: 14px auto 0;
+  position: sticky;
+  top: 10px;
+  z-index: 50;
+
+  padding: 10px 16px;
+  border-radius: 24px;
+
+  background: rgba(5, 5, 8, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    0 22px 60px rgba(0, 0, 0, 0.38);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 28px;
-  gap: 16px;
-}
-
-.resume-gap-back-btn,
-.resume-gap-header-link {
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  outline: none;
-  cursor: pointer;
-  color: #f8fafc;
-  background: rgba(15, 23, 42, 0.8);
-  min-height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  font-weight: 850;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: 0.24s ease;
-  text-decoration: none;
-}
-
-.resume-gap-back-btn:hover,
-.resume-gap-header-link:hover {
-  transform: translateY(-1px);
-  border-color: rgba(124, 58, 237, 0.48);
-  background: rgba(124, 58, 237, 0.16);
+  gap: 18px;
 }
 
 .resume-gap-title-box {
   text-align: center;
+  min-width: 0;
 }
 
 .resume-gap-title-box h1 {
   margin: 0;
+  color: #ffffff;
   font-size: 24px;
-  font-weight: 950;
-  letter-spacing: -0.04em;
+  line-height: 1.05;
+  font-weight: 1000;
+  letter-spacing: -0.05em;
 }
 
 .resume-gap-title-box p {
   margin: 4px 0 0;
-  color: #94a3b8;
-  font-size: 13px;
-  font-weight: 700;
+  color: var(--resume-muted);
+  font-size: 12px;
+  font-weight: 750;
 }
+
+.resume-gap-back-btn,
+.resume-gap-header-link {
+  position: relative;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 14px;
+
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 900;
+
+  border: 1px solid rgba(255, 255, 255, 0.105);
+  outline: none;
+  cursor: pointer;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  transition:
+    color var(--resume-transition),
+    background var(--resume-transition),
+    border-color var(--resume-transition),
+    transform var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-gap-back-btn:hover,
+.resume-gap-header-link:hover {
+  color: #050505;
+  transform: translateY(-2px);
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.36),
+    0 0 22px rgba(255, 255, 255, 0.18),
+    0 12px 30px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
 
 .resume-gap-main {
   position: relative;
-  z-index: 1;
-  width: min(1320px, calc(100% - 36px));
+  z-index: 2;
+
+  width: min(1820px, calc(100% - 36px));
   margin: 0 auto;
-  padding: 28px 0;
+  padding: 30px 0 42px;
+
   display: grid;
-  grid-template-columns: minmax(320px, 0.72fr) minmax(0, 1.28fr);
-  gap: 22px;
+  grid-template-columns: 560px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
 }
 
 .resume-gap-left,
@@ -116,116 +282,247 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
+/* =========================================================
+   COMMON CARD
+   ========================================================= */
+
 .resume-card {
+  position: relative;
+  overflow: hidden;
+  padding: 16px;
+  border-radius: 22px;
+
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.105);
+
+  box-shadow: var(--resume-shadow-card);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    transform var(--resume-transition),
+    border-color var(--resume-transition),
+    background var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
   background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.76));
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 28px;
-  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.28);
-  padding: 22px;
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.055), transparent 46%),
+    rgba(0, 0, 0, 0.28);
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.055),
+    0 0 28px rgba(255, 255, 255, 0.045);
+}
+
+.resume-card::before {
+  content: "";
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  top: -120px;
+  right: -120px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  filter: blur(36px);
+  pointer-events: none;
+}
+
+.resume-card::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  bottom: -120px;
+  left: -120px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.025);
+  filter: blur(38px);
+  pointer-events: none;
+}
+
+.resume-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .resume-card-title {
   display: flex;
   align-items: flex-start;
-  gap: 13px;
-  margin-bottom: 18px;
+  gap: 11px;
+  margin-bottom: 12px;
 }
 
 .resume-card-icon {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
-  border-radius: 16px;
-  color: #c4b5fd;
-  background: rgba(124, 58, 237, 0.16);
-  border: 1px solid rgba(124, 58, 237, 0.24);
+  border-radius: 14px;
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.105);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition:
+    box-shadow var(--resume-transition),
+    border-color var(--resume-transition),
+    background var(--resume-transition);
+}
+
+.resume-card:hover .resume-card-icon {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.095);
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.11),
+    0 0 42px rgba(255, 255, 255, 0.045);
 }
 
 .resume-card-title h2,
 .resume-output-header h2 {
   margin: 0;
-  font-size: 19px;
+  color: #ffffff;
+  font-size: 21px;
+  line-height: 1.1;
   font-weight: 950;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.038em;
 }
 
 .resume-card-title p,
 .resume-output-header p {
-  margin: 4px 0 0;
-  color: #94a3b8;
+  margin: 5px 0 0;
+  color: var(--resume-muted);
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.4;
 }
 
+/* =========================================================
+   UPLOAD BOX
+   ========================================================= */
+
 .resume-upload-box {
-  min-height: 170px;
-  border: 2px dashed rgba(148, 163, 184, 0.22);
-  border-radius: 24px;
-  color: #94a3b8;
+  min-height: 112px;
+  padding: 14px;
+  border-radius: 20px;
+  color: var(--resume-muted);
   cursor: pointer;
-  background: rgba(148, 163, 184, 0.045);
+  text-align: center;
+
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.04), transparent 45%),
+    rgba(255, 255, 255, 0.045);
+  border: 2px dashed rgba(255, 255, 255, 0.14);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px;
-  transition: 0.24s ease;
+  gap: 7px;
+
+  transition:
+    transform var(--resume-transition),
+    background var(--resume-transition),
+    border-color var(--resume-transition),
+    color var(--resume-transition),
+    box-shadow var(--resume-transition);
 }
 
 .resume-upload-box:hover {
-  border-color: rgba(124, 58, 237, 0.48);
-  background: rgba(124, 58, 237, 0.1);
-  color: #c4b5fd;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.34);
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.075), transparent 45%),
+    rgba(255, 255, 255, 0.075);
+  color: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 28px rgba(255, 255, 255, 0.07);
 }
 
 .resume-upload-box input {
   display: none;
 }
 
+.resume-upload-box svg {
+  width: 31px;
+  height: 31px;
+}
+
 .resume-upload-box strong {
-  color: #f8fafc;
-  font-size: 15px;
+  color: #ffffff;
+  font-size: 14px;
   font-weight: 950;
 }
 
 .resume-upload-box span {
-  font-size: 13px;
+  color: var(--resume-muted);
+  font-size: 12px;
+  line-height: 1.4;
 }
 
+/* =========================================================
+   JD FILE UPLOAD
+   ========================================================= */
+
+.resume-jd-upload-box {
+  min-height: 92px;
+  margin-bottom: 10px;
+  padding: 13px;
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.resume-jd-upload-box:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.075);
+  color: #ffffff;
+}
+
+/* =========================================================
+   SELECTED FILE
+   ========================================================= */
+
 .resume-selected-file {
-  margin-top: 14px;
+  position: relative;
+  margin-top: 10px;
+  min-width: 0;
+
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 13px;
-  border-radius: 18px;
-  background: rgba(148, 163, 184, 0.08);
-  border: 1px solid rgba(148, 163, 184, 0.12);
+  gap: 10px;
+
+  padding: 9px 11px;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.095);
 }
 
 .resume-selected-file svg {
-  color: #c4b5fd;
+  color: #e5e7eb;
   flex-shrink: 0;
 }
 
 .resume-selected-file div {
   min-width: 0;
+  flex: 1;
 }
 
 .resume-selected-file strong {
   display: block;
-  color: #f8fafc;
-  font-size: 13px;
-  font-weight: 900;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 950;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -234,35 +531,120 @@
 .resume-selected-file span {
   display: block;
   margin-top: 2px;
-  color: #94a3b8;
-  font-size: 12px;
+  color: var(--resume-muted);
+  font-size: 11px;
+  font-weight: 700;
 }
+
+.resume-file-clear-btn {
+  width: 27px;
+  height: 27px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 999px;
+  color: #fecaca;
+  background: var(--resume-error-soft);
+  border: 1px solid var(--resume-error-border);
+  font-size: 19px;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform var(--resume-transition),
+    background var(--resume-transition),
+    color var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-file-clear-btn:hover {
+  transform: scale(1.08);
+  background: rgba(239, 68, 68, 0.2);
+  color: #ffffff;
+  box-shadow:
+    0 0 18px rgba(239, 68, 68, 0.16),
+    0 0 44px rgba(239, 68, 68, 0.08);
+}
+
+/* =========================================================
+   OR DIVIDER
+   ========================================================= */
+
+.resume-or-divider {
+  position: relative;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resume-or-divider::before,
+.resume-or-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.105);
+}
+
+.resume-or-divider span {
+  margin: 0 12px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: var(--resume-muted);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.095);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
 
 .resume-jd-textarea {
   width: 100%;
-  min-height: 260px;
+  min-height: 115px;
+  max-height: 145px;
   resize: vertical;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.105);
   outline: none;
-  border-radius: 22px;
-  padding: 16px;
-  color: #f8fafc;
-  background: rgba(2, 6, 23, 0.35);
-  font-size: 14px;
-  line-height: 1.65;
+  border-radius: 18px;
+  padding: 12px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.28);
+  font-size: 13px;
+  line-height: 1.5;
   font-family: inherit;
+
+  transition:
+    border-color var(--resume-transition),
+    background var(--resume-transition),
+    box-shadow var(--resume-transition);
 }
 
 .resume-jd-textarea:focus {
-  border-color: rgba(124, 58, 237, 0.48);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.38);
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.045),
+    0 0 28px rgba(255, 255, 255, 0.05);
 }
 
 .resume-jd-textarea::placeholder {
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.resume-jd-card .resume-jd-textarea {
+  margin-top: 0;
 }
 
 .resume-jd-footer {
-  margin-top: 10px;
+  margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -270,18 +652,39 @@
 }
 
 .resume-jd-footer span {
-  color: #94a3b8;
-  font-size: 12px;
+  color: var(--resume-muted);
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .resume-jd-footer button {
   border: none;
   outline: none;
   cursor: pointer;
-  color: #c4b5fd;
-  background: transparent;
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.105);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 11.5px;
   font-weight: 900;
+
+  transition:
+    transform var(--resume-transition),
+    background var(--resume-transition),
+    color var(--resume-transition),
+    border-color var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-jd-footer button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  color: #050505;
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.16),
+    0 0 38px rgba(255, 255, 255, 0.08);
 }
 
 .resume-jd-footer button:disabled {
@@ -289,33 +692,73 @@
   cursor: not-allowed;
 }
 
+/* =========================================================
+   ANALYZE MATCH CARD - COMPACT FITTED UI
+   ========================================================= */
+
+.resume-action-card {
+  padding: 16px;
+  border-radius: 22px;
+}
+
+.resume-action-card .resume-card-title {
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.resume-action-card .resume-card-title h2 {
+  font-size: 21px;
+}
+
+.resume-action-card .resume-card-title p {
+  max-width: 420px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .resume-status-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 11px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .resume-status-item {
-  padding: 13px;
-  border-radius: 16px;
-  background: rgba(148, 163, 184, 0.07);
-  border: 1px solid rgba(148, 163, 184, 0.11);
+  min-height: 58px;
+  padding: 10px 11px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.052);
+  border: 1px solid rgba(255, 255, 255, 0.085);
+
+  transition:
+    transform var(--resume-transition),
+    background var(--resume-transition),
+    border-color var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-status-item:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 0 16px rgba(255, 255, 255, 0.075),
+    0 0 36px rgba(255, 255, 255, 0.035);
 }
 
 .resume-status-item span {
   display: block;
-  color: #94a3b8;
-  font-size: 11px;
+  color: var(--resume-muted-soft);
+  font-size: 9.5px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
 }
 
 .resume-status-item strong {
   display: block;
   margin-top: 4px;
-  color: #f8fafc;
-  font-size: 14px;
+  color: #ffffff;
+  font-size: 12.5px;
   font-weight: 950;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -323,60 +766,94 @@
 }
 
 .resume-status-good {
-  color: #22c55e !important;
+  color: var(--resume-success) !important;
+  text-shadow:
+    0 0 12px rgba(34, 197, 94, 0.26),
+    0 0 26px rgba(34, 197, 94, 0.12);
 }
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
 .resume-primary-btn,
 .resume-secondary-btn,
 .resume-danger-btn {
-  border: none;
+  border: 1px solid transparent;
   outline: none;
-  min-height: 46px;
+  min-height: 40px;
   cursor: pointer;
   border-radius: 999px;
   padding: 0 18px;
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 950;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: 0.24s ease;
+
+  transition:
+    transform var(--resume-transition),
+    box-shadow var(--resume-transition),
+    background var(--resume-transition),
+    color var(--resume-transition),
+    border-color var(--resume-transition);
 }
 
 .resume-primary-btn {
   width: 100%;
-  margin-top: 16px;
-  color: white;
-  background: linear-gradient(135deg, #7c3aed, #9333ea);
-  box-shadow: 0 16px 42px rgba(124, 58, 237, 0.34);
+  min-height: 44px;
+  margin-top: 12px;
+  color: #050505;
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 14px 36px rgba(255, 255, 255, 0.085),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .resume-primary-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 22px 56px rgba(124, 58, 237, 0.45);
+  background: #f8fafc;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.32),
+    0 0 22px rgba(255, 255, 255, 0.22),
+    0 0 58px rgba(255, 255, 255, 0.1),
+    0 20px 50px rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .resume-secondary-btn {
-  color: #f8fafc;
-  background: rgba(15, 23, 42, 0.86);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.105);
 }
 
 .resume-secondary-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  background: rgba(148, 163, 184, 0.1);
+  color: #050505;
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.16),
+    0 0 42px rgba(255, 255, 255, 0.08);
 }
 
 .resume-danger-btn {
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.22);
+  color: #fecaca;
+  background: var(--resume-error-soft);
+  border-color: var(--resume-error-border);
 }
 
 .resume-danger-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  background: rgba(239, 68, 68, 0.18);
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.46);
+  box-shadow:
+    0 0 18px rgba(239, 68, 68, 0.2),
+    0 0 46px rgba(239, 68, 68, 0.09);
 }
 
 .resume-primary-btn:disabled,
@@ -384,14 +861,20 @@
 .resume-danger-btn:disabled {
   cursor: not-allowed;
   opacity: 0.55;
+  transform: none;
+  box-shadow: none;
 }
 
 .resume-action-row {
-  margin-top: 11px;
+  margin-top: 9px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 }
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
 
 .resume-alert {
   border-radius: 18px;
@@ -405,15 +888,21 @@
 }
 
 .resume-alert-error {
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.11);
-  border: 1px solid rgba(239, 68, 68, 0.24);
+  color: #fecaca;
+  background: var(--resume-error-soft);
+  border: 1px solid var(--resume-error-border);
+  box-shadow:
+    0 0 18px rgba(239, 68, 68, 0.12),
+    0 0 42px rgba(239, 68, 68, 0.06);
 }
 
 .resume-alert-success {
-  color: #86efac;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.22);
+  color: #bbf7d0;
+  background: var(--resume-success-soft);
+  border: 1px solid var(--resume-success-border);
+  box-shadow:
+    0 0 18px rgba(34, 197, 94, 0.12),
+    0 0 42px rgba(34, 197, 94, 0.06);
 }
 
 .resume-alert-close {
@@ -427,60 +916,95 @@
   line-height: 1;
 }
 
+.resume-mini-alert {
+  margin-top: 12px;
+  padding: 11px 12px;
+  font-size: 13px;
+}
+
+/* =========================================================
+   EMPTY / LOADING
+   ========================================================= */
+
 .resume-empty-card,
 .resume-loading-card {
-  min-height: calc(100vh - 134px);
+  min-height: calc(100vh - 178px);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   flex-direction: column;
-  color: #94a3b8;
+  color: var(--resume-muted);
+  padding: 28px;
+}
+
+.resume-empty-card > svg,
+.resume-loading-card > svg {
+  color: #e5e7eb;
+  width: 46px;
+  height: 46px;
 }
 
 .resume-empty-card h2,
 .resume-loading-card h2 {
-  margin: 16px 0 8px;
-  color: #f8fafc;
-  font-size: 24px;
+  margin: 14px 0 8px;
+  color: #ffffff;
+  font-size: 25px;
   font-weight: 950;
 }
 
 .resume-empty-card p,
 .resume-loading-card p {
   margin: 0;
-  max-width: 520px;
-  color: #94a3b8;
+  max-width: 560px;
+  color: var(--resume-muted);
   font-size: 14px;
   line-height: 1.7;
 }
 
 .resume-empty-steps {
-  margin-top: 24px;
+  margin-top: 22px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  width: min(620px, 100%);
+  width: min(640px, 100%);
 }
 
 .resume-step-item {
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(148, 163, 184, 0.07);
-  border: 1px solid rgba(148, 163, 184, 0.12);
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.052);
+  border: 1px solid rgba(255, 255, 255, 0.095);
+
+  transition:
+    transform var(--resume-transition),
+    border-color var(--resume-transition),
+    background var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-step-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.08),
+    0 0 42px rgba(255, 255, 255, 0.04);
 }
 
 .resume-step-item span {
   width: 30px;
   height: 30px;
-  margin: 0 auto 9px;
+  margin: 0 auto 8px;
   border-radius: 999px;
-  color: #c4b5fd;
-  background: rgba(124, 58, 237, 0.16);
-  border: 1px solid rgba(124, 58, 237, 0.24);
+  color: #050505;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-weight: 950;
 }
 
@@ -489,34 +1013,45 @@
   font-weight: 800;
 }
 
+/* =========================================================
+   SCORE CARD
+   ========================================================= */
+
 .resume-score-card {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 16px;
+  padding: 18px;
   background:
-    radial-gradient(circle at top right, rgba(124, 58, 237, 0.22), transparent 46%),
-    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.76));
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.07), transparent 46%),
+    rgba(0, 0, 0, 0.24);
 }
 
 .resume-score-circle {
-  width: 130px;
-  height: 130px;
+  width: 112px;
+  height: 112px;
   flex-shrink: 0;
   border-radius: 999px;
-  background:
-    radial-gradient(circle at center, rgba(124, 58, 237, 0.18), transparent 58%),
-    rgba(124, 58, 237, 0.1);
-  border: 1px solid rgba(124, 58, 237, 0.34);
   color: white;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.105), transparent 58%),
+    rgba(255, 255, 255, 0.052);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  box-shadow: 0 20px 54px rgba(124, 58, 237, 0.24);
+
+  box-shadow:
+    inset 0 0 28px rgba(255, 255, 255, 0.035),
+    0 20px 54px rgba(0, 0, 0, 0.26),
+    0 0 44px rgba(255, 255, 255, 0.055);
 }
 
 .resume-score-circle span {
-  font-size: 35px;
+  color: #ffffff;
+  font-size: 29px;
   line-height: 1;
   font-weight: 1000;
   letter-spacing: -0.06em;
@@ -524,7 +1059,7 @@
 
 .resume-score-circle small {
   margin-top: 4px;
-  color: #c4b5fd;
+  color: var(--resume-muted);
   font-size: 12px;
   font-weight: 950;
   text-transform: uppercase;
@@ -537,9 +1072,9 @@
 
 .resume-score-label {
   display: inline-flex;
-  color: #67e8f9;
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.24);
+  color: #bbf7d0;
+  background: var(--resume-success-soft);
+  border: 1px solid var(--resume-success-border);
   padding: 7px 10px;
   border-radius: 999px;
   font-size: 11px;
@@ -550,7 +1085,8 @@
 
 .resume-score-content h2 {
   margin: 12px 0 5px;
-  font-size: 28px;
+  color: #ffffff;
+  font-size: 23px;
   line-height: 1.15;
   font-weight: 950;
   letter-spacing: -0.04em;
@@ -558,39 +1094,61 @@
 
 .resume-score-content p {
   margin: 0;
-  color: #94a3b8;
+  color: var(--resume-muted);
   font-size: 14px;
 }
 
 .resume-score-content strong {
-  color: #f8fafc;
+  color: #ffffff;
 }
+
+/* =========================================================
+   MINI RESULT GRID
+   ========================================================= */
 
 .resume-result-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  gap: 9px;
 }
 
 .resume-mini-result-card {
   min-width: 0;
-  padding: 17px;
-  border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.76));
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  padding: 13px;
+  border-radius: 17px;
+
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.105);
+
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 11px;
+
+  transition:
+    transform var(--resume-transition),
+    border-color var(--resume-transition),
+    background var(--resume-transition),
+    box-shadow var(--resume-transition);
+}
+
+.resume-mini-result-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.065);
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.08),
+    0 0 42px rgba(255, 255, 255, 0.04);
 }
 
 .resume-mini-result-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
   flex-shrink: 0;
-  color: #c4b5fd;
-  background: rgba(124, 58, 237, 0.16);
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.105);
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -598,7 +1156,7 @@
 
 .resume-mini-result-card span {
   display: block;
-  color: #94a3b8;
+  color: var(--resume-muted);
   font-size: 11px;
   font-weight: 850;
   text-transform: uppercase;
@@ -608,7 +1166,7 @@
 .resume-mini-result-card strong {
   display: block;
   margin-top: 4px;
-  color: #f8fafc;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 950;
   overflow: hidden;
@@ -616,57 +1174,117 @@
   white-space: nowrap;
 }
 
+/* =========================================================
+   CHAT STYLE SCROLLABLE REPORT OUTPUT
+   ========================================================= */
+
+.resume-report-card {
+  padding: 16px;
+}
+
 .resume-output-header {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
+}
+
+.resume-output-header h2 {
+  font-size: 21px;
+}
+
+.resume-output-header p {
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .resume-markdown-output {
+  width: 100%;
+  min-height: 310px;
+  max-height: calc(100vh - 360px);
+  overflow-y: auto;
+
   white-space: pre-wrap;
-  color: #e2e8f0;
-  font-size: 14px;
-  line-height: 1.78;
+  color: #e5e7eb;
+  font-size: 13.8px;
+  line-height: 1.72;
+
   padding: 18px;
   border-radius: 20px;
-  background: rgba(148, 163, 184, 0.06);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.055), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.035), transparent 42%),
+    rgba(255, 255, 255, 0.052);
+
+  border: 1px solid rgba(255, 255, 255, 0.095);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.02);
 }
+
+.resume-markdown-output strong,
+.resume-markdown-output b {
+  color: #ffffff;
+  font-weight: 950;
+}
+
+.resume-markdown-output ul,
+.resume-markdown-output ol {
+  margin: 10px 0 14px;
+  padding-left: 20px;
+}
+
+.resume-markdown-output li {
+  margin-bottom: 7px;
+  color: #e5e7eb;
+}
+
+/* =========================================================
+   DEBUG CARD
+   ========================================================= */
 
 .resume-debug-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
+  padding: 16px;
 }
 
 .resume-debug-card details {
-  border-radius: 18px;
-  background: rgba(148, 163, 184, 0.06);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.052);
+  border: 1px solid rgba(255, 255, 255, 0.095);
   overflow: hidden;
 }
 
 .resume-debug-card summary {
   cursor: pointer;
-  padding: 14px;
-  color: #c4b5fd;
+  padding: 11px 13px;
+  color: #ffffff;
+
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+
+  font-size: 12.5px;
   font-weight: 950;
 }
 
 .resume-debug-card pre {
-  max-height: 260px;
+  max-height: 200px;
   overflow: auto;
   white-space: pre-wrap;
   margin: 0;
   padding: 14px;
-  color: #e2e8f0;
-  background: rgba(2, 6, 23, 0.36);
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  color: #e5e7eb;
+  background: rgba(0, 0, 0, 0.36);
+  border-top: 1px solid rgba(255, 255, 255, 0.095);
   font-size: 12px;
   line-height: 1.6;
 }
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
 
 .resume-spin {
   animation: resumeSpin 1s linear infinite;
@@ -678,38 +1296,155 @@
   }
 }
 
-.resume-debug-card pre::-webkit-scrollbar {
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.resume-markdown-output::-webkit-scrollbar,
+.resume-debug-card pre::-webkit-scrollbar,
+.resume-jd-textarea::-webkit-scrollbar {
   width: 7px;
 }
 
-.resume-debug-card pre::-webkit-scrollbar-track {
+.resume-markdown-output::-webkit-scrollbar-track,
+.resume-debug-card pre::-webkit-scrollbar-track,
+.resume-jd-textarea::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.resume-debug-card pre::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.28);
+.resume-markdown-output::-webkit-scrollbar-thumb,
+.resume-debug-card pre::-webkit-scrollbar-thumb,
+.resume-jd-textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
   border-radius: 999px;
 }
 
-@media (max-width: 1180px) {
+.resume-markdown-output::-webkit-scrollbar-thumb:hover,
+.resume-debug-card pre::-webkit-scrollbar-thumb:hover,
+.resume-jd-textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.36);
+}
+
+/* =========================================================
+   RESPONSIVE - LARGE LAPTOP
+   ========================================================= */
+
+@media (max-width: 1500px) {
+  .resume-gap-main {
+    grid-template-columns: 500px minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .resume-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - LAPTOP
+   ========================================================= */
+
+@media (max-width: 1280px) {
+  .resume-gap-header {
+    width: calc(100% - 28px);
+  }
+
+  .resume-gap-main {
+    width: calc(100% - 28px);
+    grid-template-columns: 440px minmax(0, 1fr);
+    gap: 18px;
+    padding-top: 26px;
+  }
+
+  .resume-card {
+    padding: 14px;
+  }
+
+  .resume-card-title h2,
+  .resume-output-header h2 {
+    font-size: 19px;
+  }
+
+  .resume-upload-box {
+    min-height: 100px;
+  }
+
+  .resume-jd-upload-box {
+    min-height: 86px;
+  }
+
+  .resume-jd-textarea {
+    min-height: 105px;
+    max-height: 125px;
+  }
+
+  .resume-empty-card,
+  .resume-loading-card {
+    min-height: calc(100vh - 170px);
+  }
+
+  .resume-markdown-output {
+    min-height: 300px;
+    max-height: calc(100vh - 350px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .resume-gap-header {
+    width: calc(100% - 36px);
+    padding: 13px 14px 13px 18px;
+  }
+
+  .resume-gap-main {
+    grid-template-columns: 1fr;
+    width: calc(100% - 28px);
+    padding-top: 28px;
+  }
+
+  .resume-gap-left {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .resume-action-card {
+    grid-column: 1 / -1;
+  }
+
+  .resume-status-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .resume-empty-card,
+  .resume-loading-card {
+    min-height: 450px;
+  }
+
+  .resume-markdown-output {
+    min-height: 360px;
+    max-height: 560px;
+  }
+
   .resume-result-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 1100px) {
-  .resume-gap-main {
-    grid-template-columns: 1fr;
-  }
-
-  .resume-empty-card,
-  .resume-loading-card {
-    min-height: 540px;
-  }
-}
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
 
 @media (max-width: 720px) {
   .resume-gap-header {
+    width: calc(100% - 20px);
+    position: relative;
+    top: auto;
+    margin-top: 12px;
+    border-radius: 20px;
     flex-wrap: wrap;
     padding: 14px;
   }
@@ -717,45 +1452,6 @@
   .resume-gap-title-box {
     order: -1;
     width: 100%;
-  }
-
-  .resume-gap-main {
-    width: min(100% - 24px, 1320px);
-    padding: 18px 0;
-  }
-
-  .resume-status-grid,
-  .resume-action-row,
-  .resume-result-grid,
-  .resume-empty-steps {
-    grid-template-columns: 1fr;
-  }
-
-  .resume-score-card {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .resume-score-circle {
-    width: 118px;
-    height: 118px;
-  }
-
-  .resume-primary-btn,
-  .resume-secondary-btn,
-  .resume-danger-btn {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .resume-card {
-    padding: 17px;
-    border-radius: 22px;
-  }
-
-  .resume-upload-box {
-    min-height: 145px;
   }
 
   .resume-gap-title-box h1 {
@@ -766,218 +1462,89 @@
     font-size: 12px;
   }
 
-  .resume-score-content h2 {
-    font-size: 24px;
+  .resume-gap-back-btn,
+  .resume-gap-header-link {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 12px;
+    border-radius: 12px;
   }
-}
-/* =========================================================
-   JD FILE UPLOAD CSS UPDATE
-   Paste at bottom of ResumeGapFinder.css
-   ========================================================= */
 
-.resume-jd-upload-box {
-  min-height: 135px;
-  margin-bottom: 14px;
-  border-style: dashed;
-  background:
-    radial-gradient(circle at top right, rgba(6, 182, 212, 0.08), transparent 42%),
-    rgba(148, 163, 184, 0.045);
-}
+  .resume-gap-main {
+    width: calc(100% - 20px);
+    padding: 22px 0 34px;
+    gap: 16px;
+  }
 
-.resume-jd-upload-box:hover {
-  border-color: rgba(6, 182, 212, 0.48);
-  background: rgba(6, 182, 212, 0.09);
-  color: #67e8f9;
-}
+  .resume-gap-left {
+    display: flex;
+    flex-direction: column;
+  }
 
-.resume-selected-file {
-  position: relative;
-  margin-top: 14px;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 12px 14px;
-  border-radius: 17px;
-  background: rgba(148, 163, 184, 0.08);
-  border: 1px solid rgba(148, 163, 184, 0.13);
-}
+  .resume-card {
+    padding: 15px;
+    border-radius: 21px;
+  }
 
-.resume-selected-file svg {
-  color: #c4b5fd;
-  flex-shrink: 0;
-}
+  .resume-card-title {
+    gap: 11px;
+  }
 
-.resume-selected-file div {
-  min-width: 0;
-  flex: 1;
-}
+  .resume-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+  }
 
-.resume-selected-file strong {
-  display: block;
-  color: #f8fafc;
-  font-size: 13px;
-  font-weight: 950;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  .resume-card-title h2,
+  .resume-output-header h2 {
+    font-size: 18px;
+  }
 
-.resume-selected-file span {
-  display: block;
-  margin-top: 2px;
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.resume-file-clear-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  border-radius: 999px;
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.12);
-  font-size: 20px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.22s ease;
-}
-
-.resume-file-clear-btn:hover {
-  transform: scale(1.08);
-  background: rgba(239, 68, 68, 0.2);
-}
-
-.resume-or-divider {
-  position: relative;
-  margin: 18px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.resume-or-divider::before,
-.resume-or-divider::after {
-  content: "";
-  height: 1px;
-  flex: 1;
-  background: rgba(148, 163, 184, 0.16);
-}
-
-.resume-or-divider span {
-  margin: 0 12px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  color: #94a3b8;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  font-size: 11px;
-  font-weight: 950;
-  letter-spacing: 0.08em;
-}
-
-.resume-mini-alert {
-  margin-top: 12px;
-  padding: 11px 12px;
-  font-size: 13px;
-}
-
-.resume-jd-card .resume-jd-textarea {
-  margin-top: 0;
-}
-
-/* Better JD textarea spacing after upload section */
-
-.resume-jd-textarea {
-  width: 100%;
-  min-height: 220px;
-  resize: vertical;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  outline: none;
-  border-radius: 20px;
-  padding: 15px 16px;
-  color: #f8fafc;
-  background: rgba(2, 6, 23, 0.34);
-  font-size: 14px;
-  line-height: 1.65;
-  font-family: inherit;
-  transition: 0.22s ease;
-}
-
-.resume-jd-textarea:focus {
-  border-color: rgba(124, 58, 237, 0.48);
-  background: rgba(2, 6, 23, 0.46);
-}
-
-.resume-jd-textarea::placeholder {
-  color: #64748b;
-}
-
-.resume-jd-footer {
-  margin-top: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.resume-jd-footer span {
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.resume-jd-footer button {
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: #c4b5fd;
-  background: rgba(124, 58, 237, 0.12);
-  border: 1px solid rgba(124, 58, 237, 0.22);
-  border-radius: 999px;
-  padding: 7px 12px;
-  font-size: 12px;
-  font-weight: 900;
-  transition: 0.22s ease;
-}
-
-.resume-jd-footer button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  background: rgba(124, 58, 237, 0.18);
-}
-
-.resume-jd-footer button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-/* Status grid JD uploaded text fix */
-
-.resume-status-item strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Mobile */
-
-@media (max-width: 720px) {
+  .resume-upload-box,
   .resume-jd-upload-box {
-    min-height: 125px;
-  }
-
-  .resume-or-divider {
-    margin: 15px 0;
+    min-height: 108px;
   }
 
   .resume-jd-textarea {
-    min-height: 190px;
+    min-height: 145px;
+    max-height: none;
+  }
+
+  .resume-status-grid,
+  .resume-action-row,
+  .resume-empty-steps,
+  .resume-result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-empty-card,
+  .resume-loading-card {
+    min-height: 420px;
+  }
+
+  .resume-score-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .resume-score-circle {
+    width: 108px;
+    height: 108px;
+  }
+
+  .resume-score-circle span {
+    font-size: 28px;
+  }
+
+  .resume-score-content h2 {
+    font-size: 22px;
+  }
+
+  .resume-primary-btn,
+  .resume-secondary-btn,
+  .resume-danger-btn {
+    width: 100%;
   }
 
   .resume-jd-footer {
@@ -988,5 +1555,63 @@
   .resume-jd-footer button {
     width: 100%;
     justify-content: center;
+  }
+
+  .resume-markdown-output {
+    min-height: 360px;
+    max-height: 520px;
+    padding: 16px;
+    border-radius: 18px;
+    font-size: 13.4px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .resume-gap-header {
+    width: calc(100% - 16px);
+  }
+
+  .resume-gap-main {
+    width: calc(100% - 16px);
+  }
+
+  .resume-card {
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .resume-upload-box {
+    min-height: 106px;
+  }
+
+  .resume-gap-title-box h1 {
+    font-size: 20px;
+  }
+
+  .resume-gap-title-box p {
+    font-size: 11.5px;
+  }
+
+  .resume-mini-result-card {
+    padding: 13px;
+    border-radius: 17px;
+  }
+
+  .resume-markdown-output {
+    padding: 15px;
+    border-radius: 18px;
+    font-size: 13px;
+  }
+
+  .resume-debug-card summary {
+    font-size: 12px;
+  }
+
+  .resume-debug-card pre {
+    font-size: 11.5px;
   }
 }
