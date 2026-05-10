@@ -1,0 +1,29 @@
+{
+    "session_id": "dc4be58d-f846-494f-b56f-559cfba49f6b_resume_match",
+    "created_at": "2026-05-10 03:22:34",
+    "updated_at": "2026-05-10 03:22:38",
+    "pdfs": [
+        {
+            "name": "Resume (3).pdf",
+            "path": "",
+            "pages": 1,
+            "chunks": 3,
+            "uploaded_at": "2026-05-10 03:22:35",
+            "updated_at": "2026-05-10 03:22:35",
+            "processed": true,
+            "processed_at": "2026-05-10 03:22:35"
+        },
+        {
+            "name": "JD-Power Electronics Engr-B 2026-03-27 (1).pdf",
+            "path": "",
+            "pages": 1,
+            "chunks": 11,
+            "uploaded_at": "2026-05-10 03:22:35",
+            "updated_at": "2026-05-10 03:22:35",
+            "processed": true,
+            "processed_at": "2026-05-10 03:22:35"
+        }
+    ],
+    "total_chunks": 14,
+    "status": "indexed"
+}
