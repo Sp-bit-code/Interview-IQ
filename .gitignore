@@ -1,5 +1,51 @@
-﻿node_modules/
-.env.local
-.env
+﻿# Node / Frontend
+node_modules/
 dist/
+.vite/
+
+# Environment files
+.env
+.env.local
+.env.*.local
 *.local
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Backend local storage / uploaded files / vector DB
+backend/storage/
+backend/__pycache__/
+backend/src/__pycache__/
+backend/app/__pycache__/
+backend/app/routes/__pycache__/
+backend/app/schemas/__pycache__/
+
+# If old folder name exists
+rag-backend/storage/
+rag-backend/__pycache__/
+rag-backend/src/__pycache__/
+
+# Chroma / local DB files
+chroma_db/
+*.sqlite3
+*.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary files
+tempCodeRunnerFile.*
