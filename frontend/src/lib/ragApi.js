@@ -1319,17 +1319,15 @@
 
 
 
-const DEFAULT_RAG_API_URL = import.meta.env.DEV
-  ? "http://127.0.0.1:8000"
-  : "";
+const DEFAULT_RAG_API_URL = "http://127.0.0.1:8000";
 
 function normalizeApiBaseUrl(url) {
-  return String(url || DEFAULT_RAG_API_URL).replace(/\/+$/, "");
+  return String(url || "").replace(/\/+$/, "");
 }
 
-export const RAG_API_BASE_URL = normalizeApiBaseUrl(
-  import.meta.env.VITE_RAG_API_URL || DEFAULT_RAG_API_URL
-);
+export const RAG_API_BASE_URL = import.meta.env.DEV
+  ? normalizeApiBaseUrl(import.meta.env.VITE_RAG_API_URL || DEFAULT_RAG_API_URL)
+  : "";
 
 /**
  * Converts backend/FastAPI error response into readable message.
