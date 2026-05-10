@@ -4443,34 +4443,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import os
 
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
@@ -5892,7 +5864,6 @@ def debug_vector_search(request: DebugSearchRequest):
         "results": results,
     }
 
-
 # ---------------------------------------------------------
 # Serve React frontend build on Render single web service
 # ---------------------------------------------------------
@@ -5908,6 +5879,11 @@ if FRONTEND_DIST_DIR.exists():
             StaticFiles(directory=assets_dir),
             name="frontend-assets",
         )
+
+
+@app.get("/favicon.ico")
+def favicon():
+    raise HTTPException(status_code=204)
 
 
 @app.get("/{full_path:path}")
@@ -5952,3 +5928,32 @@ if __name__ == "__main__":
         port=port,
         reload=False,
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
