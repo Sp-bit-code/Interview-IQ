@@ -22,12 +22,23 @@ public class ProgressController {
 
     private final ProgressService progressService;
 
-    // Constructor-based Dependency Injection
-    public ProgressController(ProgressService progressService) {
+
+    // ===============================
+    // CONSTRUCTOR INJECTION
+    // ===============================
+
+    public ProgressController(
+            ProgressService progressService
+    ) {
+
         this.progressService = progressService;
     }
 
-    // Get all study progress of a particular user
+
+    // ===============================
+    // GET USER PROGRESS
+    // ===============================
+
     @GetMapping("/{userId}")
     public ResponseEntity<List<StudyProgress>> getUserProgress(
             @PathVariable String userId
@@ -39,33 +50,52 @@ public class ProgressController {
         return ResponseEntity.ok(progress);
     }
 
-    // Add a new topic or update existing topic progress
+
+    // ===============================
+    // SAVE / UPDATE PROGRESS
+    // ===============================
+
     @PostMapping
     public ResponseEntity<StudyProgress> saveProgress(
             @Valid @RequestBody StudyProgress studyProgress
     ) {
 
         StudyProgress savedProgress =
-                progressService.saveOrUpdateProgress(studyProgress);
+                progressService.saveOrUpdateProgress(
+                        studyProgress
+                );
 
         return ResponseEntity.ok(savedProgress);
     }
 
-    // Get number of completed topics
+
+    // ===============================
+    // COMPLETED TOPIC COUNT
+    // ===============================
+
     @GetMapping("/{userId}/completed-count")
     public ResponseEntity<Map<String, Long>> getCompletedTopicCount(
             @PathVariable String userId
     ) {
 
         long completedCount =
-                progressService.getCompletedTopicCount(userId);
+                progressService.getCompletedTopicCount(
+                        userId
+                );
 
         return ResponseEntity.ok(
-                Map.of("completedTopics", completedCount)
+                Map.of(
+                        "completedTopics",
+                        completedCount
+                )
         );
     }
 
-    // Delete a progress entry
+
+    // ===============================
+    // DELETE PROGRESS
+    // ===============================
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteProgress(
             @PathVariable Long id
@@ -74,7 +104,10 @@ public class ProgressController {
         progressService.deleteProgress(id);
 
         return ResponseEntity.ok(
-                Map.of("message", "Progress deleted successfully")
+                Map.of(
+                        "message",
+                        "Progress deleted successfully"
+                )
         );
     }
 }
