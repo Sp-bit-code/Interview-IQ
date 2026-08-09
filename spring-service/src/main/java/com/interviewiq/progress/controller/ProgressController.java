@@ -15,7 +15,8 @@ import java.util.Map;
 @RequestMapping("/api/progress")
 @CrossOrigin(origins = {
         "http://localhost:5173",
-        "https://interview-iq-0imv.onrender.com"
+        "https://interview-iq-0imv.onrender.com",
+        "https://interview-iq-8c6r.onrender.com"
 })
 public class ProgressController {
 
