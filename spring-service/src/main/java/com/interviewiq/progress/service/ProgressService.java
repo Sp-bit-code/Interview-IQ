@@ -2,6 +2,10 @@ package com.interviewiq.progress.service;
 
 import com.interviewiq.progress.model.StudyProgress;
 import com.interviewiq.progress.repository.ProgressRepository;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,16 +15,61 @@ public class ProgressService {
 
     private final ProgressRepository progressRepository;
 
-    // Constructor Injection
-    public ProgressService(ProgressRepository progressRepository) {
+
+    // ===============================
+    // CONSTRUCTOR INJECTION
+    // ===============================
+
+    public ProgressService(
+            ProgressRepository progressRepository
+    ) {
+
         this.progressRepository = progressRepository;
     }
 
-    public List<StudyProgress> getUserProgress(String userId) {
-        return progressRepository.findByUserId(userId);
+
+    // ===============================
+    // BEAN LIFE CYCLE
+    // ===============================
+
+    @PostConstruct
+    public void init() {
+
+        System.out.println(
+                "ProgressService Bean Initialized"
+        );
     }
 
-    public StudyProgress saveOrUpdateProgress(StudyProgress progress) {
+
+    @PreDestroy
+    public void destroy() {
+
+        System.out.println(
+                "ProgressService Bean Destroyed"
+        );
+    }
+
+
+    // ===============================
+    // GET USER PROGRESS
+    // ===============================
+
+    public List<StudyProgress> getUserProgress(
+            String userId
+    ) {
+
+        return progressRepository
+                .findByUserId(userId);
+    }
+
+
+    // ===============================
+    // SAVE OR UPDATE PROGRESS
+    // ===============================
+
+    public StudyProgress saveOrUpdateProgress(
+            StudyProgress progress
+    ) {
 
         return progressRepository
                 .findByUserIdAndTopicName(
@@ -29,25 +78,48 @@ public class ProgressService {
                 )
                 .map(existingProgress -> {
 
-                    existingProgress.setCompleted(progress.getCompleted());
+                    existingProgress.setCompleted(
+                            progress.getCompleted()
+                    );
 
-                    return progressRepository.save(existingProgress);
+                    return progressRepository.save(
+                            existingProgress
+                    );
                 })
-                .orElseGet(() -> progressRepository.save(progress));
+                .orElseGet(() ->
+                        progressRepository.save(progress)
+                );
     }
 
-    public long getCompletedTopicCount(String userId) {
+
+    // ===============================
+    // COMPLETED TOPIC COUNT
+    // ===============================
+
+    public long getCompletedTopicCount(
+            String userId
+    ) {
 
         return progressRepository
                 .findByUserId(userId)
                 .stream()
                 .filter(progress ->
-                        Boolean.TRUE.equals(progress.getCompleted())
+                        Boolean.TRUE.equals(
+                                progress.getCompleted()
+                        )
                 )
                 .count();
     }
 
-    public void deleteProgress(Long id) {
+
+    // ===============================
+    // DELETE PROGRESS
+    // ===============================
+
+    public void deleteProgress(
+            Long id
+    ) {
+
         progressRepository.deleteById(id);
     }
 }
