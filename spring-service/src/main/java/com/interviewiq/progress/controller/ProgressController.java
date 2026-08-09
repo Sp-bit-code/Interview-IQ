@@ -13,7 +13,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/progress")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://interview-iq-0imv.onrender.com"
+})
 public class ProgressController {
 
     private final ProgressService progressService;
