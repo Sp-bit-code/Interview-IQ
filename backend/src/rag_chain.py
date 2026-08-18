@@ -32,7 +32,7 @@ from src.prompts import (
 )
 
 
-DEFAULT_GROQ_MODEL = "meta-llama/llama-prompt-guard-2-86m"
+DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b"
 
 # Same detailed RAG behavior, but safer for low-memory deployment.
 DEFAULT_RAG_TOP_K = 10
