@@ -131,16 +131,16 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 GROQ_MODEL = os.getenv(
     "GROQ_MODEL",
-    "meta-llama/llama-prompt-guard-2-86m",
+    "openai/gpt-oss-120b",
 )
 
 AVAILABLE_GROQ_MODELS = {
     "fast": {
-        "name": "meta-llama/llama-prompt-guard-2-86m",
+        "name": "openai/gpt-oss-120b",
         "description": "Fast and good for demo/deployment.",
     },
     "balanced": {
-        "name": "meta-llama/llama-prompt-guard-2-86m",
+        "name": "openai/gpt-oss-120b",
         "description": "Better quality for detailed explanations.",
     },
     "gemma": {
