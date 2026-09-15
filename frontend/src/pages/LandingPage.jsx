@@ -1598,56 +1598,96 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer ref={developerRef} id="developers" className="landing-footer">
-        <div className="landing-footer-content">
-          <div className="landing-footer-brand">
-            <Link to="/" className="landing-footer-logo">
-              <div className="landing-logo-icon">
-                <Icon src={interviewIqLogo} alt="InterviewIQ" size={20} />
-              </div>
+{/* Footer */}
+<footer ref={developerRef} id="developers" className="landing-footer">
+  <div className="landing-footer-content">
+    <div className="landing-footer-brand">
+      <Link to="/" className="landing-footer-logo">
+        <div className="landing-logo-icon">
+          <Icon src={interviewIqLogo} alt="InterviewIQ" size={20} />
+        </div>
 
-              <span>InterviewIQ</span>
-            </Link>
+        <span>InterviewIQ</span>
+      </Link>
 
-            <div className="landing-developer-card">
-              <div className="landing-developer-avatar">
-                <Icon src={userLogo} alt="Ayushi Chauhan" size={34} />
-              </div>
+      {/* Ayushi */}
+      <div className="landing-developer-card">
+        <div className="landing-developer-avatar">
+          <Icon src={userLogo} alt="Ayushi Chauhan" size={34} />
+        </div>
 
-              <div className="landing-developer-info">
-                <h4>Ayushi Chauhan</h4>
+        <div className="landing-developer-info">
+          <h4>Ayushi Chauhan</h4>
 
-                <p>
-                  MERN Stack Developer | React, Node.js, Express.js, MongoDB,
-                  JavaScript, frontend UI development, and modern web
-                  technologies.
-                </p>
+          <p>
+            MERN Stack Developer | React, Node.js, Express.js, MongoDB,
+            JavaScript, frontend UI development, and modern web
+            technologies.
+          </p>
 
-                <div className="landing-footer-socials">
-                  <a
-                    href="https://github.com/Ayushi-2564"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="GitHub"
-                  >
-                    <Icon src={githubLogo} alt="GitHub" size={19} />
-                    GitHub
-                  </a>
+          <div className="landing-footer-socials">
+            <a
+              href="https://github.com/Ayushi-2564"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >
+              <Icon src={githubLogo} alt="GitHub" size={19} />
+              GitHub
+            </a>
 
-                  <a
-                    href="https://www.linkedin.com/in/ayushi-chauhan-4b1514330/"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="LinkedIn"
-                  >
-                    <Icon src={linkedinLogo} alt="LinkedIn" size={19} />
-                    LinkedIn
-                  </a>
-                </div>
-              </div>
-            </div>
+            <a
+              href="https://www.linkedin.com/in/ayushi-chauhan-4b1514330/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <Icon src={linkedinLogo} alt="LinkedIn" size={19} />
+              LinkedIn
+            </a>
           </div>
+        </div>
+      </div>
+
+      {/* Akash */}
+      <div className="landing-developer-card">
+        <div className="landing-developer-avatar">
+          <Icon src={userLogo} alt="Akash Kumar" size={34} />
+        </div>
+
+        <div className="landing-developer-info">
+          <h4>Akash Kumar</h4>
+
+          <p>
+            Frontend Developer | React, JavaScript, HTML, CSS,
+            frontend UI development, responsive design, and modern web
+            technologies.
+          </p>
+
+          <div className="landing-footer-socials">
+            <a
+              href="https://github.com/ajakash117"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >
+              <Icon src={githubLogo} alt="GitHub" size={19} />
+              GitHub
+            </a>
+
+            <a
+              href="https://www.linkedin.com/in/akash-kumar-b0a043267"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <Icon src={linkedinLogo} alt="LinkedIn" size={19} />
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
           <div className="landing-footer-links">
             <h3>Quick Links</h3>
